@@ -1,0 +1,11 @@
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\bin\Debug\Lottery.Business.dll
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\bin\Debug\Lottery.Business.pdb
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\bin\Debug\CommonFunction.dll
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\bin\Debug\Lottery.Model.dll
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\bin\Debug\log4net.dll
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\bin\Debug\CommonFunction.pdb
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\bin\Debug\Lottery.Model.pdb
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\bin\Debug\log4net.xml
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\obj\Debug\Lottery.Business.csprojResolveAssemblyReference.cache
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\obj\Debug\Lottery.Business.dll
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Business\obj\Debug\Lottery.Business.pdb

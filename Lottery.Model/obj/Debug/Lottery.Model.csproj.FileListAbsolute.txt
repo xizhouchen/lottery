@@ -1,0 +1,5 @@
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Model\bin\Debug\Lottery.Model.dll
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Model\bin\Debug\Lottery.Model.pdb
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Model\obj\Debug\Lottery.Model.csprojResolveAssemblyReference.cache
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Model\obj\Debug\Lottery.Model.dll
+C:\Users\jackyxchen\documents\visual studio 2015\Projects\FFC\Lottery.Model\obj\Debug\Lottery.Model.pdb
