@@ -34,12 +34,6 @@ namespace CommonFunction
                 //builder.UserID = "sa";
                 //builder.Password = "1qaz2wsx3edc4rfV";
                 //builder.InitialCatalog = "Lottery";
-
-                builder.DataSource = "132.232.17.235";
-                builder.UserID = "sa";
-                builder.Password = "xizhou87022*";
-                builder.InitialCatalog = "Lottery";
-
                 _ConnString = builder.ConnectionString;
             }
            
