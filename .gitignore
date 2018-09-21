@@ -6,3 +6,7 @@ bin
 *.exe
 *.pdb
 *.cache
+obj
+bin
+obj
+obj

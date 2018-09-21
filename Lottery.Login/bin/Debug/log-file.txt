@@ -1,7 +1,0 @@
-[Header] [Footer] [Header] 2018-09-20 09:29:56,678 [10] INFO  Jacky.Logging [(null)]  - 20/09/2018 9:29:56 AM: hahahxxx
-2018-09-20 09:29:56,713 [10] FATAL Jacky.Logging [(null)]  - 20/09/2018 9:29:56 AM: dd
-[Footer] [Header] [Footer] [Header] [Footer] [Header] 20/09/2018 9:32:38 AM: hahahxxx
-20/09/2018 9:32:38 AM: dd
-[Header] [Footer] [Header] 2018-09-20 12:49:38,288 [9] INFO  Jacky.Logging [(null)]  - 20/09/2018 12:49:38 PM: hahahxxx
-2018-09-20 12:49:38,322 [9] FATAL Jacky.Logging [(null)]  - 20/09/2018 12:49:38 PM: dd
-[Footer] [Header] [Footer] [Header] [Footer] 
