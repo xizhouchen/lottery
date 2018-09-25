@@ -46,6 +46,7 @@
     <Compile Include="DB_PredictRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Res_Pay.cs" />
+    <Compile Include="Res_QQminResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

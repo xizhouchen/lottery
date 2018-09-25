@@ -23,6 +23,12 @@ namespace capturelottery
         private LotteryBusiness LoBll = new LotteryBusiness();
 
         private string LotteryURl = "https://www.blgj02.com/controller/lottery/chart";
+
+        private string minjueQQMinURL = "http://mj.gud5100.com/api/game-lottery/query-trend";
+
+        private string minjueCookie = "SESSION=590458bc-4298-4b48-835c-8f15d2dbfbfd";
+
+        private string minjuePost = "name=qqmin&query=latest-30";
         public Form1()
         {
             InitializeComponent();
@@ -55,25 +61,52 @@ namespace capturelottery
             var currentIssue = "";
             try
             {
-                var lottery_id = 10014;
-              
-                var res = Util.getURLResponseStr(LotteryURl, null, "content=%7B%22command_id%22%3A23%2C%22lottery_id%22%3A%22" + lottery_id + "%22%2C%22issue_status%22%3A%221%22%2C%22count%22%3A%2230%22%7D&command=lottery_request_transmit_v2");
-                var rlt = JsonConvert.DeserializeObject<Res_LotteryResult>(res);
-                foreach (var item in rlt.data.detail.LIST) {
-                    if (!LoBll.IsExsit(lottery_id.ToString(), item.CP_QS))
+                //var lottery_id = 10014;
+
+                // var res = Util.getURLResponseStr(LotteryURl, null, "content=%7B%22command_id%22%3A23%2C%22lottery_id%22%3A%22" + lottery_id + "%22%2C%22issue_status%22%3A%221%22%2C%22count%22%3A%2230%22%7D&command=lottery_request_transmit_v2");
+                //var rlt = JsonConvert.DeserializeObject<Res_LotteryResult>(res);
+                //foreach (var item in rlt.data.detail.LIST)
+                //{
+                //    if (!LoBll.IsExsit(lottery_id.ToString(), item.CP_QS))
+                //    {
+                //        currentIssue = item.CP_QS.ToString();
+                //        var exrlt = LoBll.InsertLottery(item.ZJHM, this.BatchId, lottery_id.ToString(), item.CP_QS.ToString(), item.SJKJSJ);
+                //        if (exrlt > 0)
+                //        {
+                //            this.richTextBox1.Text += string.Format("{0}--抓取成功\t 时间：{1}\n", item.CP_QS, DateTime.Now);
+                //            this.richTextBox1.ForeColor = Color.Green;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        break;
+                //    }
+
+                //}
+
+                var res  = Util.getURLResponseStr(minjueQQMinURL,minjueCookie, minjuePost);
+                var lottery_id = 10077; //给qq一个id
+                var rlt = JsonConvert.DeserializeObject<Res_QQminResult>(res);
+                foreach (var item in rlt.data.result) {
+                    if (!LoBll.IsExsit(lottery_id.ToString(), item.issue))
                     {
-                        currentIssue = item.CP_QS.ToString();
-                        var exrlt = LoBll.InsertLottery(item.ZJHM, this.BatchId, lottery_id.ToString(), item.CP_QS.ToString(), item.SJKJSJ);
-                        if (exrlt > 0) {
-                            this.richTextBox1.Text += string.Format("{0}--抓取成功\t 时间：{1}\n", item.CP_QS, DateTime.Now);
+                        currentIssue = item.issue.ToString();
+                        //TimeSpan ts = new TimeSpan(item.openTime);
+                        System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
+                        DateTime dt = startTime.AddMilliseconds(item.openTime);
+                        var exrlt = LoBll.InsertLottery(item.code, this.BatchId, lottery_id.ToString(), item.issue.ToString(), dt.ToString());
+                        if (exrlt > 0)
+                        {
+                            this.richTextBox1.Text += string.Format("{0}--抓取成功\t 时间：{1}\n", item.issue, DateTime.Now);
                             this.richTextBox1.ForeColor = Color.Green;
                         }
                     }
-                    else {
+                    else
+                    {
                         break;
                     }
-                   
                 }
+
             }
             catch (Exception ex) {
                 this.richTextBox1.Text += string.Format("\n抓取失败\t 时间：{0}\t 异常：{1}\n", DateTime.Now,ex.Message);
