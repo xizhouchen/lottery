@@ -29,9 +29,9 @@ namespace CommonFunction
         public static void ErrorLog(string message,Exception ex) {
             //log4net.ILog log = log4net.LogManager.GetLogger("testApp.Logging");//获取一个日志记录器
 
-          
 
-            log.Fatal(DateTime.Now.ToString() + ": " + message, ex);
+
+            Logger.Fatal(DateTime.Now.ToString() + ": " + message, ex);
 
             
         }

@@ -57,6 +57,7 @@ namespace Lottery.Analysis
             var betModel = (BetModel)(this.comboBox2.SelectedIndex + 1);
 
             AnalysisBusiness ab = new AnalysisBusiness(betModel, list);
+            ab.SetKillNo(this.txtkill1.Text, this.txtkill2.Text);
             //list = ab.GenerateBetResult(BetModel.OnlyPair, list);
             double balance = double.Parse(this.textBox1.Text);
             double rate = double.Parse(this.textBox2.Text);
@@ -80,7 +81,7 @@ namespace Lottery.Analysis
             this.txtChaseFailed.Text = anModel.ChaseFailedCount.ToString();
             this.lblWinTime.Text = anModel.WinTimes.ToString();
             this.lblLossTime.Text = anModel.LossTimes.ToString();
-            this.lblWInRate.Text = (anModel.WinTimes / (anModel.WinTimes + anModel.LossTimes)).ToString("P0");
+            this.lblWInRate.Text = (anModel.WinTimes / (anModel.WinTimes + anModel.LossTimes)).ToString("P");
             this.txtMaxFailed.Text = anModel.MaxFailedCount.ToString();
 
             this.lblContinuFailed.Text = anModel.MaxContinueFailedCount.ToString();
@@ -101,18 +102,8 @@ namespace Lottery.Analysis
             this.dataGridView1.Columns[7].HeaderCell.Value = "奖金";
             this.dataGridView1.Columns[8].HeaderCell.Value = "余额";
 
-            this.dataGridView2.DataSource = anModel.explodeRecord;
-            this.dataGridView2.Columns[0].HeaderCell.Value = "期号";
-            this.dataGridView2.Columns[1].HeaderCell.Value = "五星杀号";
-            this.dataGridView2.Columns[2].HeaderCell.Value = "后三杀号";
-            this.dataGridView2.Columns[3].HeaderCell.Value = "中奖号码";
-            this.dataGridView2.Columns[4].HeaderCell.Value = "状态";
-            this.dataGridView2.Columns[5].HeaderCell.Value = "是否下单";
-            this.dataGridView2.Columns[5].Visible = false;
-
-            this.dataGridView2.Columns[6].HeaderCell.Value = "下单金额";
-            this.dataGridView2.Columns[7].HeaderCell.Value = "奖金";
-            this.dataGridView2.Columns[8].HeaderCell.Value = "余额";
+          
+            
 
 
             for (var i = 0; i < this.dataGridView1.Rows.Count; i++)
@@ -231,6 +222,42 @@ namespace Lottery.Analysis
 
         private void label15_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var betModel = (BetModel)(this.comboBox2.SelectedIndex + 1);
+            var list = TestList;
+            list = list.OrderBy(r => r.IssueId).ToList();
+            AnalysisBusiness ab = new AnalysisBusiness(betModel, list);
+            ab.SetKillNo(this.txtkill1.Text, this.txtkill2.Text);
+            this.dataGridView2.DataSource = ab.FindPayPoints(int.Parse(txtling.Text));
+
+
+        //     public string PayIssueId { get; set; }
+
+        //public string StartDate { get; set; }
+
+        //public string PayDate { get; set; }
+
+        //public int RestPayCount { get; set; }
+
+
+        //public string StartIssueId { get; set; }
+
+        //public int PassCount { get; set; }
+
+        //public int WinCount { get; set; }
+
+            this.dataGridView2.Columns[0].HeaderCell.Value = "下单期";
+            this.dataGridView2.Columns[1].HeaderCell.Value = "观察开始日期";
+            this.dataGridView2.Columns[2].HeaderCell.Value = "下单时间";
+            this.dataGridView2.Columns[3].HeaderCell.Value = "剩余下单量";
+            this.dataGridView2.Columns[4].HeaderCell.Value = "观察开始期";
+            this.dataGridView2.Columns[5].HeaderCell.Value = "已过期数";
+            this.dataGridView2.Columns[6].HeaderCell.Value = "胜利期数";
+            this.dataGridView2.Columns[7].HeaderCell.Value = "下单终止期";
 
         }
     }

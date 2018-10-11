@@ -40,9 +40,23 @@ namespace Lottery.Business
 
                 _calModel = new Model_OnlyPairPreWinChase(history);
             }
-            else if (betModel == BetModel.KillTowNo) {
+            else if (betModel == BetModel.KillTowNo)
+            {
                 _calModel = new Model_Cycle_KillTwoNum(history);
+
             }
+            else if (betModel == BetModel.KillTowNoMiddle) {
+                _calModel = new Model_Cycle_KillTwoNum_Middle(history);
+            } else if (betModel == BetModel.KillTowNoFront) {
+                _calModel = new Model_Cycle_KillTwoNum_Front(history);
+            }
+
+
+        }
+
+        public void SetKillNo(string no1,string no2) {
+            _calModel.KillNo1 = no1;
+            _calModel.KillNo2 = no2;
         }
 
         /// <summary>
@@ -97,6 +111,11 @@ namespace Lottery.Business
                 flag = true;
             }
             return flag;
+        }
+
+        public List<CanBePayPoint> FindPayPoints(int linjie) {
+
+            return _calModel.FindPayPoints(linjie);
         }
 
         public AnalysisModel GenerateAnalysisModel(List<DB_PredictRecord> records) {

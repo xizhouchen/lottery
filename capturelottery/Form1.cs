@@ -26,7 +26,7 @@ namespace capturelottery
 
         private string minjueQQMinURL = "http://mj.gud5100.com/api/game-lottery/query-trend";
 
-        private string minjueCookie = "SESSION=590458bc-4298-4b48-835c-8f15d2dbfbfd";
+        private string minjueCookie = "SESSION=16a01b9b-fa19-4868-9345-58e78e2b7dbb";
 
         private string minjuePost = "name=qqmin&query=latest-30";
         public Form1()

@@ -44,6 +44,8 @@
     <Compile Include="IModel.cs" />
     <Compile Include="LotteryBusiness.cs" />
     <Compile Include="Model_Cycle_KillTwoNum.cs" />
+    <Compile Include="Model_Cycle_KillTwoNum_Front.cs" />
+    <Compile Include="Model_Cycle_KillTwoNum_Middle.cs" />
     <Compile Include="Model_OnlyPair.cs" />
     <Compile Include="Model_OnlyPairPreWinChase.cs" />
     <Compile Include="Model_PairKillOne.cs" />

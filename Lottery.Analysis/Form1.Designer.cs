@@ -80,6 +80,13 @@
             this.lblCycleRate = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.lblContinuFailed = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.txtkill1 = new System.Windows.Forms.TextBox();
+            this.txtkill2 = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.txtling = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -89,7 +96,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(17, 251);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(930, 248);
+            this.dataGridView1.Size = new System.Drawing.Size(914, 200);
             this.dataGridView1.TabIndex = 0;
             // 
             // label1
@@ -301,7 +308,9 @@
             "对子杀号（复杂1）",
             "对子杀号（复杂2）",
             "上对出下单",
-            "后三杀2"});
+            "后三杀2",
+            "中三杀2",
+            "前三杀2"});
             this.comboBox2.Location = new System.Drawing.Point(408, 28);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(120, 21);
@@ -310,9 +319,9 @@
             // dataGridView2
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(17, 505);
+            this.dataGridView2.Location = new System.Drawing.Point(17, 457);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(930, 136);
+            this.dataGridView2.Size = new System.Drawing.Size(914, 184);
             this.dataGridView2.TabIndex = 0;
             // 
             // button2
@@ -601,11 +610,76 @@
             this.lblContinuFailed.Text = "0";
             this.lblContinuFailed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label21.Location = new System.Drawing.Point(12, 175);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(52, 26);
+            this.label21.TabIndex = 1;
+            this.label21.Text = "杀1:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label22.Location = new System.Drawing.Point(12, 208);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(52, 26);
+            this.label22.TabIndex = 1;
+            this.label22.Text = "杀2:";
+            // 
+            // txtkill1
+            // 
+            this.txtkill1.Location = new System.Drawing.Point(182, 181);
+            this.txtkill1.Name = "txtkill1";
+            this.txtkill1.Size = new System.Drawing.Size(48, 20);
+            this.txtkill1.TabIndex = 2;
+            this.txtkill1.Text = "4";
+            // 
+            // txtkill2
+            // 
+            this.txtkill2.Location = new System.Drawing.Point(182, 214);
+            this.txtkill2.Name = "txtkill2";
+            this.txtkill2.Size = new System.Drawing.Size(48, 20);
+            this.txtkill2.TabIndex = 2;
+            this.txtkill2.Text = "5";
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(453, 156);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 13;
+            this.button5.Text = "找下单点";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // txtling
+            // 
+            this.txtling.Location = new System.Drawing.Point(385, 160);
+            this.txtling.Name = "txtling";
+            this.txtling.Size = new System.Drawing.Size(48, 20);
+            this.txtling.TabIndex = 2;
+            this.txtling.Text = "460";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label24.Location = new System.Drawing.Point(301, 156);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(84, 26);
+            this.label24.TabIndex = 1;
+            this.label24.Text = "临界值:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1212, 653);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.lblCycleRate);
             this.Controls.Add(this.lblCycleWin);
             this.Controls.Add(this.lblWInRate);
@@ -639,6 +713,9 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.txtlast);
+            this.Controls.Add(this.txtkill2);
+            this.Controls.Add(this.txtling);
+            this.Controls.Add(this.txtkill1);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.txtFirstBet);
@@ -648,7 +725,10 @@
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label9);
+            this.Controls.Add(this.label22);
             this.Controls.Add(this.label5);
+            this.Controls.Add(this.label24);
+            this.Controls.Add(this.label21);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label6);
@@ -722,6 +802,13 @@
         private System.Windows.Forms.Label lblCycleRate;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label lblContinuFailed;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox txtkill1;
+        private System.Windows.Forms.TextBox txtkill2;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.TextBox txtling;
+        private System.Windows.Forms.Label label24;
     }
 }
 

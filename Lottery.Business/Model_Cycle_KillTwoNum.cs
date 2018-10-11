@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +8,108 @@ using Lottery.Model;
 
 namespace Lottery.Business
 {
+  
     public class Model_Cycle_KillTwoNum : IModel
     {
+       
+       
         public Model_Cycle_KillTwoNum(List<DB_PredictRecord> history) : base(history)
         {
 
+        }
+
+       
+      
+
+        public override List<CanBePayPoint> FindPayPoints(int splitNum = 455)
+        {
+            List<CanBePayPoint> payPoints = new List<CanBePayPoint>();
+            var an = this.GenerateAmountResult(1, 1, 1, 1, BetModel.KillTowNo, 1);
+
+            for (var i = 0; i <= an.Count - 1; i++)
+            {
+                int wincount = 0;
+                int failedcount = 0;
+                int passcount = 0;
+                for (var j = i; j <= an.Count - 1; j++)
+                {
+                    passcount++;
+                    if (an[j].Status == "中奖")
+                    {
+                        wincount++;
+                    }
+                    else
+                    {
+                        failedcount++;
+                    }
+                    var x = (splitNum - wincount) * 0.16464;
+                    var y = 0.056 * (1440 - passcount);
+                    if (x - y > 0)
+                    {
+
+                        CanBePayPoint p = new CanBePayPoint();
+                        p.StartIssueId = an[i].IssueId;
+                        p.StartDate = an[i].RewardDate;
+                        p.RestPayCount = 1440 - passcount;
+                        p.PayIssueId = an[j].IssueId;
+                        p.PayDate = an[j].RewardDate;
+                        p.PassCount = passcount;
+                        p.WinCount = wincount;
+                        if (p.RestPayCount > 0) {
+                            payPoints.Add(p);
+                        }
+                     
+                    }
+
+                }
+            }
+            payPoints = payPoints.OrderByDescending(r => r.StartIssueId).ToList();
+            return payPoints;
+
+        }
+
+        public override CanBePayPoint FindPayPoint() {
+            List<CanBePayPoint> payPoints = new List<CanBePayPoint>();
+            var an = this.GenerateAmountResult(1, 1, 1, 1, BetModel.KillTowNo, 1);
+          
+            for (var i = 0; i <= an.Count - 1; i++) {
+                int wincount = 0;
+                int failedcount = 0;
+                int passcount = 0;
+                for (var j = i; j <= an.Count - 1; j++) {
+                    passcount++;
+                    if (an[j].Status == "中奖")
+                    {
+                        wincount++;
+                    }
+                    else {
+                        failedcount++;
+                    }
+                    var x = (455 - wincount) * 0.16464;
+                    var y = 0.056 * (1440 - passcount);
+                    if (x - y > 0) {
+                       
+                        CanBePayPoint p = new CanBePayPoint();
+                        p.StartIssueId = an[i].IssueId;
+                        p.RestPayCount = 1440 - passcount;
+                        p.PayIssueId = an[j].IssueId;
+                        p.PassCount = passcount;
+                        p.WinCount = wincount;
+                        if (an[j].IssueId == an[an.Count - 1].IssueId) {
+                            payPoints.Add(p);
+                        }
+                        
+                        break;
+                    }
+                   
+                }
+            }
+            payPoints = payPoints.OrderByDescending(r => r.StartIssueId).ToList();
+            if (payPoints.Count > 0) {
+                return payPoints[0];
+            }
+            return null;
+            
         }
 
         public override List<DB_PredictRecord> GenerateAmountResult(double balance, double firstBet, int chaseNum, double benifitRate, BetModel model, double secondBenifitRate)
@@ -32,90 +130,12 @@ namespace Lottery.Business
                 item.RewardDate = History[i].RewardDate;
                 item.IssueId = History[i].IssueId;
 
-                //判断前三期的对子数，如果有两个对子，则不下单，且再跳2期
-                //3期有对子计数器
-                //int pairCount = 0;
-                //for (var j = 1; j <= 3; j++) {
-                //    if (this.IsHasPair(History[i - j].GoodNo.Substring(3)))
-                //    {
-                //        pairCount = pairCount + 1;
-                //    }
-                //}
-
-                //if (pairCount >= 1) {
-                //    item.Status = "未下单";
-                //    betList.Add(item);
-                //    i = i + 1;
-                //    if (i < History.Count) {
-                //        History[i].Status = "未下单";
-                //        betList.Add(History[i]);
-                //    }
-
-                //    i = i + 1;
-                //    if (i < History.Count) {
-                //        History[i].Status = "未下单";
-                //        betList.Add(History[i]);
-                //    }
-
-                //    continue;
-                //}
-
-                //出现对子停3期
-                //if (this.IsHasPair(History[i-1].GoodNo.Substring(3))) {
-                //    item.Status = "未下单";
-                //    betList.Add(item);
-                //    i = i + 1;
-                //    if (i < History.Count)
-                //    {
-                //        History[i].Status = "未下单";
-                //        betList.Add(History[i]);
-                //    }
-
-                //    i = i + 1;
-                //    if (i < History.Count)
-                //    {
-                //        History[i].Status = "未下单";
-                //        betList.Add(History[i]);
-                //    }
-
-                //    continue;
-                //}
-
-                item.PayAmount = this.PayMoneys[count - 1];
-                balance = balance - item.PayAmount;
-                item.CirCleNum = count;
-                item.Balance = balance;
-                if (this.IsWinByMode(this.History[i - 1], BetModel.OnlyPair) || !isStop)
-                {
-                    if (IsWinByMode(item, BetModel.OnlyPair))
-                    {
-                        item.Earn = item.PayAmount * benifitRate;
-                        balance = balance + item.Earn;
-                        item.Balance = balance;
-                        item.Status = "中奖";
-                        isStop = false;
-                        item.CircleTotal = item.CircleTotal + 1;
-                        count = 1;
-                    }
-                    else
-                    {
-                        count = count + 1;
-                        item.Status = "未中奖";
-                        if (count == 4)
-                        {
-                            isStop = true;
-                            count = 1;
-                            item.CircleTotal = item.CircleTotal + 1;
-                        }
-                        else {
-                            isStop = false;
-                        }
 
 
-                    }
-                }
-                else {
-                    item.Status = "未下单";
+                if (IsWinByKillTwoNum(i, this.History, ref item)) {
+                    item.Status = "中奖";
+                } else {
+                    item.Status = "未中奖";
                 }
                
                 betList.Add(item);
@@ -126,6 +146,13 @@ namespace Lottery.Business
         }
 
         public bool IsWinByKillTwoNum(int payIndex,List<DB_PredictRecord> records,ref DB_PredictRecord item) {
+            if (!string.IsNullOrEmpty(this.KillNo1) && !string.IsNullOrEmpty(this.KillNo2)) {
+                item.Kill3No = this.KillNo1;
+                item.Kill5No = this.KillNo2;
+                return CheckWin(this.KillNo1, this.KillNo2, records[payIndex].GoodNo);
+            }
+            
+
             bool flag = false;
             Dictionary<int, int> ne = new Dictionary<int, int>();
             ne[0] = 0;
@@ -142,7 +169,7 @@ namespace Lottery.Business
             //先选出前两期出现了两次的号
            
             foreach (var key in ne.Keys) {
-                if (records[payIndex - 1].GoodNo.Substring(3).Contains(key.ToString()) && records[payIndex - 2].GoodNo.Substring(3).Contains(key.ToString())) {
+                if (GetThreeNo(records[payIndex - 1].GoodNo).Contains(key.ToString()) && GetThreeNo(records[payIndex - 2].GoodNo).Contains(key.ToString())) {
                     rlt.Add(key.ToString());
                 }
             }
@@ -150,7 +177,7 @@ namespace Lottery.Business
             if (rlt.Count > 1) {
                 item.Kill3No = rlt[0];
                 item.Kill5No = rlt[1];
-                return CheckWin(rlt[0], rlt[1], records[payIndex].GoodNo,true);
+                return CheckWin(rlt[0], rlt[1], records[payIndex].GoodNo);
             }
             var firstNum = "";
             var secondNum = "";
@@ -162,7 +189,7 @@ namespace Lottery.Business
                 item.Kill3No = firstNum;
                 item.Kill5No = secondNum;
               
-                return CheckWin(firstNum, secondNum, records[payIndex].GoodNo,true);
+                return CheckWin(firstNum, secondNum, records[payIndex].GoodNo);
             }
             //一个号都不能取到，选择冷号集合(两个冷号)
             else {
@@ -171,14 +198,69 @@ namespace Lottery.Business
                 item.Kill3No = firstNum;
                 item.Kill5No = secondNum;
               
-                return CheckWin(firstNum, secondNum, records[payIndex].GoodNo,true);
+                return CheckWin(firstNum, secondNum, records[payIndex].GoodNo);
             }
-          
-
-
-            
-
          
+        }
+
+        public List<string> GetTwoKillNo(int payIndex, List<DB_PredictRecord> records, ref DB_PredictRecord item) {
+            List<string> nums = new List<string>();
+            Dictionary<int, int> ne = new Dictionary<int, int>();
+            ne[0] = 0;
+            ne[1] = 0;
+            ne[2] = 0;
+            ne[3] = 0;
+            ne[4] = 0;
+            ne[5] = 0;
+            ne[6] = 0;
+            ne[7] = 0;
+            ne[8] = 0;
+            ne[9] = 0;
+            List<string> rlt = new List<string>();
+            //先选出前两期出现了两次的号
+
+            foreach (var key in ne.Keys)
+            {
+                if (GetThreeNo(records[payIndex - 1].GoodNo).Contains(key.ToString()) && GetThreeNo(records[payIndex - 2].GoodNo).Contains(key.ToString()))
+                {
+                    rlt.Add(key.ToString());
+                }
+            }
+
+            if (rlt.Count > 1)
+            {
+                item.Kill3No = rlt[0];
+                item.Kill5No = rlt[1];
+                nums.Add(item.Kill3No);
+                nums.Add(item.Kill5No);
+                //return CheckWin(rlt[0], rlt[1], records[payIndex].GoodNo, true);
+            }
+            var firstNum = "";
+            var secondNum = "";
+            //能取到一个号
+            if (rlt.Count == 1)
+            {
+                firstNum = rlt[0];
+                secondNum = SelectColdNo(payIndex, records, null, true);
+                item.Kill3No = firstNum;
+                item.Kill5No = secondNum;
+                nums.Add(item.Kill3No);
+                nums.Add(item.Kill5No);
+                //return CheckWin(firstNum, secondNum, records[payIndex].GoodNo, true);
+            }
+            //一个号都不能取到，选择冷号集合(两个冷号)
+            else
+            {
+                firstNum = SelectColdNo(payIndex, records, null, true);
+                secondNum = SelectColdNo(payIndex, records, firstNum, true);
+                item.Kill3No = firstNum;
+                item.Kill5No = secondNum;
+                nums.Add(item.Kill3No);
+                nums.Add(item.Kill5No);
+                //return CheckWin(firstNum, secondNum, records[payIndex].GoodNo, true);
+            }
+
+            return nums;
         }
 
         public bool CheckWin(string num1, string num2, string goodNo,bool onlyOne = false)
@@ -186,13 +268,13 @@ namespace Lottery.Business
             if (onlyOne == true) {
                 num1 = "11111";
             }
-            var afterThree = goodNo.Substring(3);
+            var afterThree = GetThreeNo(goodNo);
             if (!afterThree.Contains(num1) && !afterThree.Contains(num2)) {
                 //后三不出对子
 
                // var strArr = afterThree.Split(new char[] { ',' });
 
-                if (this.IsHasPair(afterThree) && onlyOne == false) {
+                if (this.IsHasPairAndThree(afterThree) && onlyOne == false) {
                     return false;
                 }
 
@@ -207,7 +289,7 @@ namespace Lottery.Business
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
-        private bool IsHasPair(string afterThree) {
+        private bool IsHasPairAndThree(string afterThree) {
             string[] strArr = afterThree.Split(new char[] { ',' });
             bool rlt = false;
             Dictionary<int, int> occurCountDic = new Dictionary<int, int>();
@@ -232,7 +314,7 @@ namespace Lottery.Business
 
             foreach (var key in occurCountDic.Keys)
             {
-                if (occurCountDic[key] == 2)
+                if (occurCountDic[key] == 2 || occurCountDic[key] == 3)
                 {
                     return true;
                 }

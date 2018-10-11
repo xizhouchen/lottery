@@ -15,12 +15,17 @@ namespace Lottery.Business
         PairKlllCV1 = 3, // 复杂
         PairKillCV2 = 4,  // 杀冷号
         OnlyPairPreWin = 5, // 前三期迈对子，前三期不中，如果出现对子，再追，失败后，继续重复
-        KillTowNo = 6
+        KillTowNo = 6,
+        KillTowNoMiddle = 7, //中三杀2
+        KillTowNoFront = 8 //前三杀2
+
     }
-
-
     public abstract class IModel
     {
+        public string KillNo1 { get; set; }
+
+        public string KillNo2 { get; set; }
+
         public Dictionary<int, double> PayMoneys = new Dictionary<int, double>();
         public IModel(List<DB_PredictRecord> history) {
 
@@ -48,6 +53,76 @@ namespace Lottery.Business
 
             this.History = history;
         }
+        public virtual List<CanBePayPoint> FindPayPoints(int splitNum = 455)
+        {
+            List<CanBePayPoint> payPoints = new List<CanBePayPoint>();
+          
+            return payPoints;
+
+        }
+
+        public virtual CanBePayPoint FindPayPoint()
+        {
+            List<CanBePayPoint> payPoints = new List<CanBePayPoint>();
+            var an = this.GenerateAmountResult(1, 1, 1, 1, BetModel.KillTowNo, 1);
+
+            for (var i = 0; i <= an.Count - 1; i++)
+            {
+                int wincount = 0;
+                int failedcount = 0;
+                int passcount = 0;
+                for (var j = i; j <= an.Count - 1; j++)
+                {
+                    passcount++;
+                    if (an[j].Status == "中奖")
+                    {
+                        wincount++;
+                    }
+                    else
+                    {
+                        failedcount++;
+                    }
+                    var x = (455 - wincount) * 0.16464;
+                    var y = 0.056 * (1440 - passcount);
+                    if (x - y > 0)
+                    {
+
+                        CanBePayPoint p = new CanBePayPoint();
+                        p.StartIssueId = an[i].IssueId;
+                        p.RestPayCount = 1440 - passcount;
+                        p.PayIssueId = an[j].IssueId;
+                        p.PassCount = passcount;
+                        p.WinCount = wincount;
+                        if (an[j].IssueId == an[an.Count - 1].IssueId)
+                        {
+                            payPoints.Add(p);
+                        }
+
+                        break;
+                    }
+
+                }
+            }
+            payPoints = payPoints.OrderByDescending(r => r.StartIssueId).ToList();
+            if (payPoints.Count > 0)
+            {
+                return payPoints[0];
+            }
+            return null;
+
+        }
+
+
+        /// <summary>
+        /// 后三
+        /// </summary>
+        /// <param name="goodNo"></param>
+        /// <returns></returns>
+        public virtual string GetThreeNo(string goodNo)
+        {
+            return goodNo.Substring(3);
+        }
+
         /// <summary>
         /// 根据模式判断
         /// 判断逻辑，有且只有一个对子，不能有3个的，4 个的，5个的。就是中奖
@@ -107,7 +182,7 @@ namespace Lottery.Business
                 {
                     var goodNo = records[j].GoodNo.ToString();
                     if (isAfterThree) {
-                        goodNo = goodNo.Substring(3);
+                        goodNo = GetThreeNo(goodNo);
                     }
                     if (goodNo.Contains(i.ToString()))
                     {
@@ -136,8 +211,8 @@ namespace Lottery.Business
                 var prepreGoodNo = records[payIndex - 2].GoodNo;
                 if (isAfterThree)
                 {
-                    preGoodNo = preGoodNo.Substring(3);
-                    prepreGoodNo = prepreGoodNo.Substring(3);
+                    preGoodNo = GetThreeNo(preGoodNo);
+                    prepreGoodNo = GetThreeNo(prepreGoodNo);
                 }
                 if (!IsObliqueConnection(key.ToString(), preGoodNo, prepreGoodNo))
                 {

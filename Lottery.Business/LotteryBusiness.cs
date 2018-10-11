@@ -10,6 +10,7 @@ namespace Lottery.Business
 {
     public class LotteryBusiness
     {
+        private int _maxBatchId = 14;
         /// <summary>
         /// 
         /// </summary>
@@ -20,6 +21,16 @@ namespace Lottery.Business
 
             var sql = "insert into[Lottery].[dbo].[PredictRecord] values('" + issueId + "','" +
                 "-" + "','" + "-" + "','" + zjhm + "','" + "-" + "','" + rewardate + "',getdate()," + BatchId + "," + lotteryId + ")";
+            rlt = SQLHelper.ExecNonQuery(sql, null);
+            return rlt;
+        }
+
+        public int InsertAutoRecord(int paycount,double paytotal,int paywintime,int payfailedtime,double paypoint,DateTime startDate,
+            DateTime endDate,double lowestBalance,int isUp,string userId,double startB,double endB)
+        {
+            int rlt = 0;
+
+            var sql = @"insert into [Lottery].[dbo].[AutoRecord] values("+paycount+","+paytotal+","+paywintime+","+payfailedtime+","+paypoint+",'"+startDate.ToString("yyyy/MM/dd HH:mm:ss")+"','"+endDate.ToString("yyyy/MM/dd HH:mm:ss") +"',"+lowestBalance+","+isUp+",'"+userId+"',"+startB+","+endB+")";
             rlt = SQLHelper.ExecNonQuery(sql, null);
             return rlt;
         }
@@ -63,7 +74,7 @@ namespace Lottery.Business
             List<DB_PredictRecord> records = new List<DB_PredictRecord>();
 
             var sql = "select top "+lastQS+" * from [Lottery].[dbo].[PredictRecord]"
-                        +" where batchId = 10"
+                        +" where batchId = "+ _maxBatchId + ""
                         +" order by IssueId desc";
             var table = SQLHelper.GetDataTable(sql, null);
             records = this.ConvertToList(table);
@@ -79,7 +90,7 @@ namespace Lottery.Business
         public List<DB_PredictRecord> GetLoRecordsByDate(DateTime from,DateTime to)
         {
             //to = to.AddDays(1);
-            var sql = "select * from [Lottery].[dbo].[PredictRecord] where batchid = 10 and "+
+            var sql = "select * from [Lottery].[dbo].[PredictRecord] where batchid = "+ _maxBatchId + " and "+
                 "CreatedOn >=  '"+from.ToString("yyyy-MM-dd HH:mm:ss") + "' and CreatedOn <= '"+to.ToString("yyyy-MM-dd HH:mm:ss") +"'";
             var table = SQLHelper.GetDataTable(sql, null);
             return this.ConvertToList(table);
@@ -89,11 +100,19 @@ namespace Lottery.Business
         public List<DB_PredictRecord> GetRecordsByPage(int pageIndex = 0, int pageSize = 1000) {
 
             var sql = @"select top "+ pageSize + " * from [dbo].[PredictRecord] "+
-                "where BatchId = 10 and IssueId not in (select top "+pageIndex*1000+" IssueId from [dbo].[PredictRecord] where BatchId = 10 order by IssueId)"
+                "where BatchId = "+ _maxBatchId + " and IssueId not in (select top "+pageIndex*1000+" IssueId from [dbo].[PredictRecord] where BatchId = 10 order by IssueId)"
                 +"order by IssueId";
             var table = SQLHelper.GetDataTable(sql, null);
             return this.ConvertToList(table);
 
+        }
+
+        public List<DB_PredictRecord> GetLastRecordsByPage(int pageIndex = 0, int pageSize = 1440) {
+            var sql = @"select top " + pageSize + " * from [dbo].[PredictRecord] " +
+              "where BatchId = " + _maxBatchId + " and IssueId not in (select top " + pageIndex * 1000 + " IssueId from [dbo].[PredictRecord] where BatchId = "+_maxBatchId+" order by IssueId desc)"
+              + "order by IssueId desc";
+            var table = SQLHelper.GetDataTable(sql, null);
+            return this.ConvertToList(table);
         }
 
 

@@ -32,6 +32,10 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,9 +45,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.lblUserId = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.lblBalance = new System.Windows.Forms.Label();
@@ -59,6 +60,28 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.lblLoginStatus = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.lblOrBalance = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtStopWin = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.txtLossStop = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.txtPayPoint = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.radioUp = new System.Windows.Forms.RadioButton();
+            this.radioDown = new System.Windows.Forms.RadioButton();
+            this.lblflow = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.lblpaytotal = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.lblstopissue = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.lblRestPayCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -80,6 +103,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button5);
             this.groupBox1.Controls.Add(this.textBox2);
             this.groupBox1.Controls.Add(this.dataGridView1);
             this.groupBox1.Controls.Add(this.button3);
@@ -92,6 +116,47 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "最近30期数据";
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(151, -6);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 11;
+            this.button5.Text = "test pay";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Visible = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(496, -3);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.TabIndex = 10;
+            this.textBox2.Visible = false;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(286, -11);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(81, 34);
+            this.button3.TabIndex = 1;
+            this.button3.Text = "模拟发单";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Visible = false;
+            this.button3.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(384, -11);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(81, 34);
+            this.button4.TabIndex = 1;
+            this.button4.Text = "模拟开奖";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Visible = false;
+            this.button4.Click += new System.EventHandler(this.button6_Click);
             // 
             // label1
             // 
@@ -132,19 +197,22 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label4.Location = new System.Drawing.Point(219, 203);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(105, 24);
+            this.label4.Size = new System.Drawing.Size(77, 24);
             this.label4.TabIndex = 7;
-            this.label4.Text = "后三杀号：";
+            this.label4.Text = "杀号2：";
             this.label4.Visible = false;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(970, 253);
+            this.button2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.button2.Location = new System.Drawing.Point(974, 247);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(114, 45);
+            this.button2.Size = new System.Drawing.Size(103, 55);
             this.button2.TabIndex = 8;
-            this.button2.Text = "开启自动下单";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Text = "开启下单";
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -152,7 +220,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(893, 203);
+            this.label5.Location = new System.Drawing.Point(849, 203);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(105, 24);
             this.label5.TabIndex = 7;
@@ -163,7 +231,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(994, 203);
+            this.label6.Location = new System.Drawing.Point(950, 203);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(90, 24);
             this.label6.TabIndex = 7;
@@ -178,42 +246,12 @@
             this.dataGridView2.Location = new System.Drawing.Point(20, 314);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
-            this.dataGridView2.Size = new System.Drawing.Size(1064, 372);
+            this.dataGridView2.Size = new System.Drawing.Size(1064, 338);
             this.dataGridView2.TabIndex = 9;
             // 
             // timer2
             // 
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(286, -11);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(81, 34);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "模拟发单";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Visible = false;
-            this.button3.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(384, -11);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(81, 34);
-            this.button4.TabIndex = 1;
-            this.button4.Text = "模拟开奖";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Visible = false;
-            this.button4.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(496, -3);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 10;
-            this.textBox2.Visible = false;
             // 
             // lblUserId
             // 
@@ -356,21 +394,297 @@
             this.lblLoginStatus.Size = new System.Drawing.Size(0, 24);
             this.lblLoginStatus.TabIndex = 7;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label15.Location = new System.Drawing.Point(117, 240);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(0, 20);
+            this.label15.TabIndex = 20;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label14.Location = new System.Drawing.Point(281, 139);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(77, 20);
+            this.label14.TabIndex = 18;
+            this.label14.Text = "初始余额";
+            // 
+            // lblOrBalance
+            // 
+            this.lblOrBalance.AutoSize = true;
+            this.lblOrBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblOrBalance.Location = new System.Drawing.Point(373, 139);
+            this.lblOrBalance.Name = "lblOrBalance";
+            this.lblOrBalance.Size = new System.Drawing.Size(18, 20);
+            this.lblOrBalance.TabIndex = 18;
+            this.lblOrBalance.Text = "0";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "30",
+            "40",
+            "50",
+            "60",
+            "70",
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "600",
+            "700",
+            "800",
+            "900",
+            "1000"});
+            this.comboBox1.Location = new System.Drawing.Point(862, 258);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(69, 32);
+            this.comboBox1.TabIndex = 24;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label16.Location = new System.Drawing.Point(32, 203);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(77, 24);
+            this.label16.TabIndex = 6;
+            this.label16.Text = "杀号1：";
+            this.label16.Visible = false;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label17.Location = new System.Drawing.Point(788, 263);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(43, 20);
+            this.label17.TabIndex = 18;
+            this.label17.Text = "倍数";
+            // 
+            // txtStopWin
+            // 
+            this.txtStopWin.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtStopWin.Location = new System.Drawing.Point(530, 259);
+            this.txtStopWin.Name = "txtStopWin";
+            this.txtStopWin.Size = new System.Drawing.Size(65, 26);
+            this.txtStopWin.TabIndex = 12;
+            this.txtStopWin.Text = "1";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label18.Location = new System.Drawing.Point(481, 262);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(43, 20);
+            this.label18.TabIndex = 23;
+            this.label18.Text = "止赢";
+            // 
+            // txtLossStop
+            // 
+            this.txtLossStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtLossStop.Location = new System.Drawing.Point(679, 260);
+            this.txtLossStop.Name = "txtLossStop";
+            this.txtLossStop.Size = new System.Drawing.Size(72, 26);
+            this.txtLossStop.TabIndex = 12;
+            this.txtLossStop.Text = "1000";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label19.Location = new System.Drawing.Point(630, 262);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(43, 20);
+            this.label19.TabIndex = 23;
+            this.label19.Text = "止损";
+            // 
+            // txtPayPoint
+            // 
+            this.txtPayPoint.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtPayPoint.Location = new System.Drawing.Point(380, 70);
+            this.txtPayPoint.Name = "txtPayPoint";
+            this.txtPayPoint.Size = new System.Drawing.Size(100, 26);
+            this.txtPayPoint.TabIndex = 12;
+            this.txtPayPoint.Text = "0.3344";
+            this.txtPayPoint.Visible = false;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label20.Location = new System.Drawing.Point(366, 21);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(60, 20);
+            this.label20.TabIndex = 23;
+            this.label20.Text = "下单点";
+            this.label20.Visible = false;
+            // 
+            // radioUp
+            // 
+            this.radioUp.AutoSize = true;
+            this.radioUp.Location = new System.Drawing.Point(380, 47);
+            this.radioUp.Name = "radioUp";
+            this.radioUp.Size = new System.Drawing.Size(37, 17);
+            this.radioUp.TabIndex = 25;
+            this.radioUp.TabStop = true;
+            this.radioUp.Text = "上";
+            this.radioUp.UseVisualStyleBackColor = true;
+            this.radioUp.Visible = false;
+            // 
+            // radioDown
+            // 
+            this.radioDown.AutoSize = true;
+            this.radioDown.Location = new System.Drawing.Point(423, 47);
+            this.radioDown.Name = "radioDown";
+            this.radioDown.Size = new System.Drawing.Size(37, 17);
+            this.radioDown.TabIndex = 25;
+            this.radioDown.TabStop = true;
+            this.radioDown.Text = "下";
+            this.radioDown.UseVisualStyleBackColor = true;
+            this.radioDown.Visible = false;
+            // 
+            // lblflow
+            // 
+            this.lblflow.AutoSize = true;
+            this.lblflow.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblflow.Location = new System.Drawing.Point(833, 665);
+            this.lblflow.Name = "lblflow";
+            this.lblflow.Size = new System.Drawing.Size(0, 24);
+            this.lblflow.TabIndex = 7;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label22.Location = new System.Drawing.Point(732, 665);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(105, 24);
+            this.label22.TabIndex = 7;
+            this.label22.Text = "下单流水：";
+            // 
+            // lblpaytotal
+            // 
+            this.lblpaytotal.AutoSize = true;
+            this.lblpaytotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblpaytotal.Location = new System.Drawing.Point(1040, 665);
+            this.lblpaytotal.Name = "lblpaytotal";
+            this.lblpaytotal.Size = new System.Drawing.Size(0, 24);
+            this.lblpaytotal.TabIndex = 7;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label24.Location = new System.Drawing.Point(912, 665);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(105, 24);
+            this.label24.TabIndex = 7;
+            this.label24.Text = "下单笔数：";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label21.Location = new System.Drawing.Point(205, 260);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(124, 24);
+            this.label21.TabIndex = 7;
+            this.label21.Text = "下单终止期：";
+            // 
+            // lblstopissue
+            // 
+            this.lblstopissue.AutoSize = true;
+            this.lblstopissue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblstopissue.ForeColor = System.Drawing.Color.Green;
+            this.lblstopissue.Location = new System.Drawing.Point(328, 260);
+            this.lblstopissue.Name = "lblstopissue";
+            this.lblstopissue.Size = new System.Drawing.Size(16, 24);
+            this.lblstopissue.TabIndex = 7;
+            this.lblstopissue.Text = "-";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label13.Location = new System.Drawing.Point(16, 260);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(124, 24);
+            this.label13.TabIndex = 7;
+            this.label13.Text = "剩余下单量：";
+            // 
+            // lblRestPayCount
+            // 
+            this.lblRestPayCount.AutoSize = true;
+            this.lblRestPayCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblRestPayCount.ForeColor = System.Drawing.Color.Green;
+            this.lblRestPayCount.Location = new System.Drawing.Point(139, 260);
+            this.lblRestPayCount.Name = "lblRestPayCount";
+            this.lblRestPayCount.Size = new System.Drawing.Size(16, 24);
+            this.lblRestPayCount.TabIndex = 7;
+            this.lblRestPayCount.Text = "-";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1102, 698);
+            this.Controls.Add(this.radioDown);
+            this.Controls.Add(this.radioUp);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lblUserId);
+            this.Controls.Add(this.txtPayPoint);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.lblBalance);
+            this.Controls.Add(this.lblOrBalance);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label14);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
+            this.Controls.Add(this.label15);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label11);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.label18);
             this.Controls.Add(this.label12);
+            this.Controls.Add(this.txtLossStop);
+            this.Controls.Add(this.txtStopWin);
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtvalidCode);
@@ -379,14 +693,23 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
+            this.Controls.Add(this.label24);
+            this.Controls.Add(this.label22);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.lblLoginStatus);
+            this.Controls.Add(this.lblpaytotal);
+            this.Controls.Add(this.lblflow);
             this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblRestPayCount);
+            this.Controls.Add(this.lblstopissue);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label21);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.label16);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "发财老！！！";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -429,6 +752,29 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label lblLoginStatus;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label lblOrBalance;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox txtStopWin;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox txtLossStop;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox txtPayPoint;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.RadioButton radioUp;
+        private System.Windows.Forms.RadioButton radioDown;
+        private System.Windows.Forms.Label lblflow;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label lblpaytotal;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label lblstopissue;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label lblRestPayCount;
     }
 }
 

@@ -23,6 +23,8 @@ namespace Lottery.FFC
 
         private string _loginCookie;
 
+        private Lottery.Business.LotteryBusiness _lb = new Business.LotteryBusiness();
+
         public static readonly CookieContainer CookieContainer = new CookieContainer();
 
         private string GetAccountBalanceURL = "https://www.blgj02.com/controller/user/get/get_user_balance/964896";
@@ -39,11 +41,15 @@ namespace Lottery.FFC
 
         private List<string> failedNums = new List<string>();
 
+        private List<string> winNums = new List<string>();
+
         private LISTItem lastRecord = new LISTItem(); //最新的一期
 
         private bool IsAutoPay = false;
 
         private Dictionary<int, double> PayMoneys = new Dictionary<int, double>();
+
+        private Dictionary<int, double> QQMoneys = new Dictionary<int, double>();
 
         private int BatchId = 0;
 
@@ -55,6 +61,40 @@ namespace Lottery.FFC
 
         private Business.Model_OnlyPair OnlyPairModel = new Business.Model_OnlyPair(null);
 
+        private string minjueQQMinURL = "http://mj.gud5100.com/api/game-lottery/query-trend";
+
+       // private string minjueCookie = "SESSION=590458bc-4298-4b48-835c-8f15d2dbfbfd";
+
+        private string minjuePost = "name=qqmin&query=latest-30";
+
+        private bool _isLogin = false;
+
+        private Business.Model_Cycle_KillTwoNum OnlyKill2Model = new Business.Model_Cycle_KillTwoNum(null);
+
+        private double StopWin = 1;
+
+        private double StopFailed = 1;
+
+        private double OriginBalance;
+
+        private double BasePayPoint = 0.3344;
+
+        private double PayPoint = 0;
+
+        private double FailedTimes = 0;
+
+        private double WinTimes = 0;
+
+        private string QQPayUrl = "http://mj.gud5100.com/api/game-lottery/add-order";
+
+        private double PayCount = 0;
+
+        private DateTime autoStartTime = DateTime.Now;
+
+        private DateTime autoEndTime = DateTime.Now;
+
+        private CanBePayPoint _goodPoint;
+
         public Form1()
         {
             InitializeComponent();
@@ -65,6 +105,9 @@ namespace Lottery.FFC
             this.dataGridView2.Columns.Add(new DataGridViewTextBoxColumn() { Name = "pay", HeaderText = "支付" });
             this.dataGridView2.Columns.Add(new DataGridViewTextBoxColumn() { Name = "earn", HeaderText = "奖金" });
             this.dataGridView2.Columns.Add(new DataGridViewTextBoxColumn() { Name = "balance", HeaderText = "余额" });
+
+            this.dataGridView2.Columns.Add(new DataGridViewTextBoxColumn() { Name = "killno1", HeaderText = "杀号1" });
+            this.dataGridView2.Columns.Add(new DataGridViewTextBoxColumn() { Name = "killno2", HeaderText = "杀号2" });
             this.dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             this.timer1.Start();
@@ -86,54 +129,51 @@ namespace Lottery.FFC
             PayMoneys[11] = 2441.040;
             PayMoneys[12] = 5065.200;
             //this.IsAutoPay = true;
+
+            QQMoneys[1] = 0.056;
+
+         
+        
+           
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //this.radioButton1.Text = "分分彩";
-            //this.radioButton2.Text = "1分半彩";
+            try
+            {
+                this.radioDown.Checked = true;
+                this.comboBox1.SelectedIndex = 0;
+                //1. 获取登录页面
+                Random dom = new Random();
+                var dd = (double)dom.Next() / (double)100;
 
-            //获取最大批次号
-            //var sql = "select max(BatchId) from [Lottery].[dbo].[PredictRecord]";
-            //var dataTable = SQLHelper.GetDataTable(sql, null);
-            //if (dataTable.Rows.Count > 0) {
-            //    var bat = dataTable.Rows[0][0].ToString();
-            //    this.BatchId = int.Parse(bat);
-            //    this.BatchId = this.BatchId + 1;
-            //}
+                string loginGetUrl = "http://mj.gud5100.com/api/utils/login-security-code?" + dd;
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(loginGetUrl);
+                req.Method = "GET";// POST OR GET， 如果是GET, 则没有第二步传参，直接第三步，获取服务端返回的数据
+                req.AllowAutoRedirect = false;//服务端重定向。一般设置false
+                req.ContentType = "application/x-www-form-urlencoded";//数据一般设置这个值，除非是文件上传
+                req.Accept = "image/webp,image/apng,image/*,*/*;q=0.8";
+                //Stream postDataStream = req.GetRequestStream();
+                //postDataStream.Write(postBytes, 0, postBytes.Length);
+                //postDataStream.Close();
+                req.Timeout = 5000;
+                HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+                string cookie = resp.Headers.Get("Set-Cookie");//获取登录后的cookie值。
+                var resStream = resp.GetResponseStream();
 
-            //1. 获取登录页面
-            Random dom = new Random();
-            var dd = (double)dom.Next() / (double)100;
+                System.Drawing.Image result = System.Drawing.Image.FromStream(resStream);
 
-            string loginGetUrl = "https://www.blgj02.com/valid_code?t=" + dd + "&user_name=";
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(loginGetUrl);
-            req.Method = "GET";// POST OR GET， 如果是GET, 则没有第二步传参，直接第三步，获取服务端返回的数据
-            req.AllowAutoRedirect = false;//服务端重定向。一般设置false
-            req.ContentType = "application/x-www-form-urlencoded";//数据一般设置这个值，除非是文件上传
-            req.Accept = "image/webp,image/apng,image/*,*/*;q=0.8";
-            //Stream postDataStream = req.GetRequestStream();
-            //postDataStream.Write(postBytes, 0, postBytes.Length);
-            //postDataStream.Close();
+                Bitmap bit = new Bitmap(result);
+                //2. 获取验证码
+                this.pictureBox1.Image = bit;
+                _cookie = cookie;
+            }
+            catch (Exception ex) {
 
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-            string cookie = resp.Headers.Get("Set-Cookie");//获取登录后的cookie值。
-            var resStream = resp.GetResponseStream();
+                LogHelper.ErrorLog(ex.Message, ex);
 
-            System.Drawing.Image result = System.Drawing.Image.FromStream(resStream);
-
-            Bitmap bit = new Bitmap(result);
-            //2. 获取验证码
-            this.pictureBox1.Image = bit;
-            _cookie = cookie;
-
-
-            //this.dataGridView2.Columns[0].HeaderCell.Value = "期号";
-            //this.dataGridView2.Columns[1].HeaderCell.Value = "五星杀号";
-            //this.dataGridView2.Columns[2].HeaderCell.Value = "后三杀号";
-            //this.dataGridView2.Columns[3].HeaderCell.Value = "中奖号码";
-            //this.dataGridView2.Columns[4].HeaderCell.Value = "状态";
-            //this.dataGridView2.Columns[5].HeaderCell.Value = "是否下单";
+            }
+           
 
         }
 
@@ -149,39 +189,132 @@ namespace Lottery.FFC
 
         }
 
+        private List<DB_PredictRecord> Convert(List<ResultItem> rltList) {
+            List<DB_PredictRecord> records = new List<DB_PredictRecord>();
+            foreach (var item in rltList) {
+                records.Add(new DB_PredictRecord()
+                {
+                    GoodNo = item.code,
+                    IssueId = item.issue
+                });
+            }
+            records = records.Select(r => r).OrderBy(r => r.IssueId).ToList();
+            return records;
+        }
+
+        private void AddAutoRecord() {
+
+            double payTotal = 0;
+            int payCount = 0;
+            int payWinTime = 0;
+            int payFailedTime = 0;
+            double lowestBalance = 1000000;
+
+            foreach (var item in this.records) {
+               
+                if (item.IsPay == "已下单")
+                {
+                    if (lowestBalance >= item.Balance)
+                    {
+                        lowestBalance = item.Balance;
+                    }
+                    payCount++;
+                    payTotal = payTotal + item.PayAmount;
+                    if (item.Status == "已中奖")
+                    {
+                        payWinTime++;
+                    }
+                    else {
+                        payFailedTime++;
+                    }
+                }
+            }
+            int isUp = 0;
+            if (radioUp.Checked == true) {
+                isUp = 1;
+            }
+            Lottery.Business.LotteryBusiness lb = new Business.LotteryBusiness();
+            lb.InsertAutoRecord(payCount, payTotal, payWinTime, payFailedTime, this.BasePayPoint,
+                this.autoStartTime, this.autoEndTime, lowestBalance, isUp, txtUserName.Text,this.OriginBalance,this.GetBalance());
+
+
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
+
+
+            if (!_isLogin) {
+                return;
+            }
+
             timer1.Stop();
+
+            //刷新计算下单点
+            var his = _lb.GetLastRecordsByPage();
+            his = his.OrderBy(r => r.IssueId).ToList();
+            OnlyKill2Model.History = his;
+            if (_goodPoint == null)
+            {
+                _goodPoint = OnlyKill2Model.FindPayPoint();
+                if (_goodPoint != null)
+                {
+                    lblstopissue.Text = _goodPoint.StopIssueId;
+                    lblRestPayCount.Text = _goodPoint.RestPayCount.ToString();
+                    this.Switch();
+                }
+            }
+
+
             var lottery_id = 10014;
             try
             {
-                var res = Util.getURLResponseStr(LotteryURl, null, "content=%7B%22command_id%22%3A23%2C%22lottery_id%22%3A%22" + lottery_id + "%22%2C%22issue_status%22%3A%221%22%2C%22count%22%3A%2230%22%7D&command=lottery_request_transmit_v2");
-                var rlt = JsonConvert.DeserializeObject<Res_LotteryResult>(res);
-              
-                this.dataGridView1.DataSource = rlt.data.detail.LIST;
+                var res = Util.getURLResponseStr(minjueQQMinURL, _cookie, minjuePost);
+                List<LISTItem> lotteryRlts = new List<LISTItem>();
+                var qqrlt = JsonConvert.DeserializeObject<Res_QQminResult>(res);
+                foreach (var qqItem in qqrlt.data.result) {
+                    System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
+                    DateTime dt = startTime.AddMilliseconds(qqItem.openTime);
+                    lotteryRlts.Add(new LISTItem
+                    {
+                        CP_ID = "腾讯分分彩",
+                        CP_QS = qqItem.issue,
+                        ZJHM = qqItem.code,
+                        SJKJSJ = dt.ToString("yyyyMMdd hh:mm:ss"),
+                        KJSJ = dt.ToString("yyyyMMdd hh:mm:ss")
+
+                    });
+                }
+
+               
+                this.dataGridView1.DataSource = lotteryRlts;
                 this.dataGridView1.Columns[0].HeaderCell.Value = "开奖号码";
                 this.dataGridView1.Columns[1].HeaderCell.Value = "期号";
                 this.dataGridView1.Columns[2].HeaderCell.Value = "开奖时间";
                 this.dataGridView1.Columns[3].HeaderCell.Value = "实际开奖时间";
                 this.dataGridView1.Columns[4].HeaderCell.Value = "彩票类型ID";
 
-                var nums = Util.PredictResult(rlt.data.detail.LIST);
 
-                foreach (var item in rlt.data.detail.LIST)
+                DB_PredictRecord dr = new DB_PredictRecord();
+                var nums = OnlyKill2Model.GetTwoKillNo(qqrlt.data.result.Count, this.Convert(qqrlt.data.result),ref dr);//Util.PredictResult(lotteryRlts);
+
+                foreach (var item in lotteryRlts)
                 {
                     if (item.CP_QS == predictNum)
                     {
                         lastRecord = item;
                     }
                 }
+                var afterspli = lotteryRlts[0].CP_QS.Split(new char[] { '-' });
+                var seq = afterspli[0] + afterspli[1];
+                predictNum = (Int64.Parse(seq) + 1).ToString();
 
-                predictNum = (long.Parse(rlt.data.detail.LIST[0].CP_QS) + 1).ToString();
-
-                if (predictNum.Contains("1920")) {
-                    DateTime date = DateTime.Parse(rlt.data.detail.LIST[0].CP_QS.Substring(0, 4) + "-" + rlt.data.detail.LIST[0].CP_QS.Substring(4, 2) + "-" + rlt.data.detail.LIST[0].CP_QS.Substring(6, 2));
+                if (predictNum.Contains("1440")) {
+                    DateTime date = DateTime.Parse(lotteryRlts[0].CP_QS.Substring(0, 4) + "-" + lotteryRlts[0].CP_QS.Substring(4, 2) + "-" + lotteryRlts[0].CP_QS.Substring(6, 2));
 
                     predictNum = date.AddDays(1).ToString("yyyyMMdd") + "0001";
                 }
+                predictNum = predictNum.Substring(0, 8) + "-" + predictNum.Substring(8, 4);
                 label2.Text = nums[0];
                 label3.Text = nums[1];
                 var selectNum = "";
@@ -189,7 +322,14 @@ namespace Lottery.FFC
                 {
                     if (i.ToString() != label2.Text && i.ToString() != label3.Text)
                     {
-                        selectNum += i.ToString();
+                        if (selectNum.Length != 14)
+                        {
+                            selectNum += i.ToString() + ",";
+                        }
+                        else {
+                            selectNum += i.ToString();
+                        }
+                       
                     }
                 }
                 label6.Text = selectNum;
@@ -201,6 +341,7 @@ namespace Lottery.FFC
                 this.label5.Visible = true;
                 this.label6.Visible = true;
                 this.button2.Visible = true;
+               
             }
             catch (Exception ex)
             {
@@ -213,103 +354,178 @@ namespace Lottery.FFC
             
           
         }
+        private void refreshStatus() {
+            if (IsAutoPay == false)
+            {
+                chaseCount = 1;
+                failedCount = 0;
 
+                this.txtLossStop.Enabled = true;
+                this.txtStopWin.Enabled = true;
+                this.txtPayPoint.Enabled = true;
+                this.comboBox1.Enabled = true;
+
+                this.radioDown.Enabled = true;
+                this.radioUp.Enabled = true;
+                //开启时还原到0
+
+
+
+                this.autoEndTime = DateTime.Now;
+
+
+                AddAutoRecord();
+
+                //PayCount = 0;
+                //lblpaytotal.Text = "0";
+                //lblflow.Text = "0";
+                this.button2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+                
+                
+                //  this.button2.bak == Color.Act
+                //lblWinRate.Text = "0%";
+                //WinTimes = 0;
+                //FailedTimes = 0;
+            }
+            else
+            {
+                this.txtLossStop.Enabled = false;
+                this.txtStopWin.Enabled = false;
+                this.txtPayPoint.Enabled = false;
+                this.comboBox1.Enabled = false;
+                this.radioDown.Enabled = false;
+                this.radioUp.Enabled = false;
+                //关闭后刷新原始金额
+                this.OriginBalance = this.GetBalance();
+                this.lblOrBalance.Text = this.OriginBalance.ToString();
+                this.lblBalance.Text = this.OriginBalance.ToString();
+                this.button2.BackColor = Color.Red;
+
+                this.autoStartTime = DateTime.Now;
+            }
+        }
         private void button2_Click(object sender, EventArgs e)
         {
-            
-            if (lblLoginStatus.Text == "登录成功")
+            try
             {
-                IsAutoPay = !IsAutoPay;
-                this.button2.Text = IsAutoPay != true ? "开启自动下单" : "关闭自动下单";
-
-
-                if (IsAutoPay == false)
+                if (lblLoginStatus.Text == "登录成功")
                 {
-                    chaseCount = 1;
-                    failedCount = 0;
+                    if (_goodPoint == null && IsAutoPay == false) {
+                        MessageBox.Show("当前期不是下单点，如果为下单点会自动开启下单");
+                        return;
+                    }
+                    
+                    IsAutoPay = !IsAutoPay;
+                    this.button2.Text = IsAutoPay != true ? "开启下单" : "关闭下单";
+
+                    refreshStatus();
+                }
+                else
+                {
+                    MessageBox.Show("请先登录！");
                 }
             }
-            else {
-                MessageBox.Show("请先登录！");
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message + ": 输入有错误");
+                IsAutoPay = false;
             }
+           
 
            
 
         }
 
-        private Res_Pay PayBill(double money) {
-            var payCount = 0;
-            if (money == 1.68)
-            {
-                payCount = 1;
-            }
-            else if (money == 3.36) {
 
-                payCount = 2;
-            }
-            else if (money == 6.72)
-            {
+        private bool PayQQBill(string model = "li",int multiple = 1,string content = "0,1,2,3,4,5,6,7") {
+            bool isSuccess = false;
+            var data = System.Web.HttpUtility.UrlEncode("[{\"lottery\":\"qqmin\",\"issue\":\"\",\"method\":\"sxzuxzlh\",\"content\":\""+content+"\",\"model\":\""+model+"\",\"multiple\":"+multiple+",\"code\":1976,\"compress\":false}]");
+            var postParam = @"text=%5B%7B%22lottery%22%3A%22qqmin%22%2C%22issue%22%3A%22%22%2C%22method%22%3A%22sxzuxzlh%22%2C%22content%22%3A%220%2C1%2C2%2C3%2C4%2C5%2C6%2C7%22%2C%22model%22%3A%22li%22%2C%22multiple%22%3A1%2C%22code%22%3A1976%2C%22compress%22%3Afalse%7D%5D";
+            postParam = "text=" + data;
+            LogHelper.InfoLog(DateTime.Now.ToString() + "  -- " + postParam);
 
-                payCount = 4;
-            }
-            else if (money == 15.12)
-            {
-
-                payCount = 9;
-            }
-            else if (money == 30.24)
-            {
-
-                payCount = 18;
-            }
-            else if (money == 63.84)
-            {
-
-                payCount = 38;
-            }
-            else if (money == 131.04)
-            {
-
-                payCount = 78;
-            }
-            else if (money == 273.84)
-            {
-
-                payCount = 163;
-            }
-            else if (money == 566.16)
-            {
-
-                payCount = 337;
-            }
-            else if (money == 1176)
-            {
-
-                payCount = 700;
-            }
-            else if (money == 2441.04)
-            {
-
-                payCount = 1453;
-            }
-            else if (money == 5065.20)
-            {
-
-                payCount = 3015;
+            var res = Util.getURLResponseStr(QQPayUrl, _loginCookie, postParam);
+            if (res.Contains("请求成功")) {
+                isSuccess = true;
             }
 
-            //var cookie = this.textBox1.Text;
-            var postParam = @"command=lottery_logon_request_transmit_v2&param=%7B%22command_id%22%3A521%2C%22lottery_id%22%3A%2210014%22%2C%22issue%22%3A%22"+predictNum+"%22%2C%22count%22%3A1%2C%22bet_info%22%3A%5B%7B%22method_id%22%3A%22150042%22%2C%22number%22%3A%220123456789%2C0123456789%22%2C%22rebate_count%22%3A75%2C%22multiple%22%3A%22"+payCount+"%22%2C%22mode%22%3A3%2C%22bet_money%22%3A%22"+ money + "%22%2C%22calc_type%22%3A%220%22%7D%5D%7D";
 
-            LogHelper.InfoLog(DateTime.Now.ToString() + "  -- "   + postParam);
+            LogHelper.InfoLog(DateTime.Now.ToString() + "  -- " + res);
+            return isSuccess;
+        } 
+
+        //private Res_Pay PayBill(double money) {
+        //    var payCount = 0;
+        //    if (money == 1.68)
+        //    {
+        //        payCount = 1;
+        //    }
+        //    else if (money == 3.36) {
+
+        //        payCount = 2;
+        //    }
+        //    else if (money == 6.72)
+        //    {
+
+        //        payCount = 4;
+        //    }
+        //    else if (money == 15.12)
+        //    {
+
+        //        payCount = 9;
+        //    }
+        //    else if (money == 30.24)
+        //    {
+
+        //        payCount = 18;
+        //    }
+        //    else if (money == 63.84)
+        //    {
+
+        //        payCount = 38;
+        //    }
+        //    else if (money == 131.04)
+        //    {
+
+        //        payCount = 78;
+        //    }
+        //    else if (money == 273.84)
+        //    {
+
+        //        payCount = 163;
+        //    }
+        //    else if (money == 566.16)
+        //    {
+
+        //        payCount = 337;
+        //    }
+        //    else if (money == 1176)
+        //    {
+
+        //        payCount = 700;
+        //    }
+        //    else if (money == 2441.04)
+        //    {
+
+        //        payCount = 1453;
+        //    }
+        //    else if (money == 5065.20)
+        //    {
+
+        //        payCount = 3015;
+        //    }
+
+        //    //var cookie = this.textBox1.Text;
+        //    var postParam = @"command=lottery_logon_request_transmit_v2&param=%7B%22command_id%22%3A521%2C%22lottery_id%22%3A%2210014%22%2C%22issue%22%3A%22"+predictNum+"%22%2C%22count%22%3A1%2C%22bet_info%22%3A%5B%7B%22method_id%22%3A%22150042%22%2C%22number%22%3A%220123456789%2C0123456789%22%2C%22rebate_count%22%3A75%2C%22multiple%22%3A%22"+payCount+"%22%2C%22mode%22%3A3%2C%22bet_money%22%3A%22"+ money + "%22%2C%22calc_type%22%3A%220%22%7D%5D%7D";
+
+        //    LogHelper.InfoLog(DateTime.Now.ToString() + "  -- "   + postParam);
            
-            var res = Util.getURLResponseStr(PayUrl, _loginCookie, postParam);
+        //    var res = Util.getURLResponseStr(PayUrl, _loginCookie, postParam);
 
-            LogHelper.InfoLog(DateTime.Now.ToString() + "  -- "  + res);
+        //    LogHelper.InfoLog(DateTime.Now.ToString() + "  -- "  + res);
 
-            return JsonConvert.DeserializeObject<Res_Pay>(res);
+        //    return JsonConvert.DeserializeObject<Res_Pay>(res);
 
-        }
+        //}
 
 
         private void UpdatePayMoneyAndChase(string goodNum,string ispay) {
@@ -324,15 +540,90 @@ namespace Lottery.FFC
 
             }
         }
+
+        private void UpdateFailed(string goodNum) {
+            if (!failedNums.Contains(goodNum))
+            {
+                failedNums.Add(goodNum);
+                FailedTimes++;
+            }
+        }
+
+        private void UpdateWin(string goodNum) {
+            if (!winNums.Contains(goodNum))
+            {
+                winNums.Add(goodNum);
+                WinTimes++;
+            }
+        }
+
+        private void Switch() {
+            IsAutoPay = !IsAutoPay;
+            this.button2.Text = IsAutoPay != true ? "开启下单" : "关闭下单";
+            refreshStatus();
+            timer2.Start();
+            return;
+        }
         private void timer2_Tick(object sender, EventArgs e)
         {
-            timer2.Stop();
-            
-            if (chaseCount > 12) {
-                IsAutoPay = !IsAutoPay;
-                this.button2.Text = IsAutoPay != true ? "开启自动下单" : "关闭自动下单";
+            if (!_isLogin)
+            {
                 return;
             }
+            timer2.Stop();
+
+            //追12手追不到自动停
+            //if (chaseCount > 12) {
+            //    IsAutoPay = !IsAutoPay;
+            //    this.button2.Text = IsAutoPay != true ? "开启自动下单" : "关闭自动下单";
+            //    return;
+            //}
+            var bal = this.GetBalance();
+            if (bal == 0) {
+                timer2.Start();
+                return;
+            }
+
+            try
+            {
+                this.StopWin = double.Parse(txtStopWin.Text);
+                this.StopFailed = double.Parse(txtLossStop.Text);
+            }
+            catch (Exception ex) {
+                LogHelper.ErrorLog("解析止损赢失败：" + ex.Message, ex);
+            }
+
+            //止损
+            if ((bal - this.OriginBalance) >= this.StopWin) {
+                Switch();
+            }
+
+            //止盈
+            if (( this.OriginBalance - bal) >= this.StopFailed)
+            {
+                Switch();
+            }
+
+            if (_goodPoint != null && _goodPoint.RestPayCount <= 0)
+            {
+                Switch();
+                _goodPoint = OnlyKill2Model.FindPayPoint();
+                if (_goodPoint != null)
+                {
+                    lblstopissue.Text = _goodPoint.StopIssueId;
+                }
+                else
+                {
+                    //lblstopissue.Text = "-";
+                }
+
+            }
+           
+
+          
+
+
+
             if (label1.Visible == true)
             {
 
@@ -346,31 +637,31 @@ namespace Lottery.FFC
                         subRecords[0].RewardDate = lastRecord.SJKJSJ;
 
                         var sub = lastRecord.ZJHM;
-                        if (!OnlyPairModel.OnlyPairModelBet(sub))
+                        if (!OnlyKill2Model.CheckWin(subRecords[0].Kill3No,subRecords[0].Kill5No,sub))
                         {
                             subRecords[0].Status = "未中奖";
-                            UpdatePayMoneyAndChase(lastRecord.CP_QS, subRecords[0].IsPay);
+
+                            UpdateFailed(subRecords[0].GoodNo);
+
+                            // UpdatePayMoneyAndChase(lastRecord.CP_QS, subRecords[0].IsPay);
                         }
                         else
                         {
                             subRecords[0].Status = "中奖";
-                            subRecords[0].Earn = subRecords[0].PayAmount * 1.93;
-                            failedCount = 0;
-                            if (subRecords[0].IsPay == "已下单")
-                            {
-                                chaseCount = 1;
-                            }
+
+
+                          
+                            subRecords[0].Earn = subRecords[0].PayAmount * 2.94;
+                            UpdateWin(subRecords[0].GoodNo);
+
+
+                          
                         }
 
-                        //var sql = "select * from [Lottery].[dbo].[PredictRecord] where issueId = '"+subRecords[0].IssueId+"'";
-                        //var dataTable = SQLHelper.GetDataTable(sql, null);
-                        //if (dataTable.Rows.Count == 0) {
-                        //    sql = "insert into[Lottery].[dbo].[PredictRecord] values('"+ subRecords[0].IssueId + "','"+ 
-                        //        subRecords[0].Kill5No+ "','"+subRecords[0].Kill3No+"','"+subRecords[0].GoodNo+"','"+subRecords[0].Status+"','"+ subRecords[0].RewardDate+ "',getdate(),"+this.BatchId+","+this.lottery_Id+")";
-                        //    var rlt = SQLHelper.ExecNonQuery(sql, null);
-                        //}
+                     
 
                     }
+
                 }
 
                 var subRecords2 = records.Select(r => r).Where(r => r.IssueId == predictNum).ToList();
@@ -381,35 +672,25 @@ namespace Lottery.FFC
                     payItem.IssueId = predictNum;
                     payItem.Status = "未开奖";
                     payItem.IsPay = "未下单";
+                    payItem.Kill3No = label2.Text;
+                    payItem.Kill5No = label3.Text;
 
                     try
                     {
-                        if (IsAutoPay && failedCount < 3)
-                        {
-
-                            //发送下单数据
-
-
-                            var bill = PayBill(PayMoneys[chaseCount]);
-
+                       
+                        
+                        if (IsAutoPay && _goodPoint!= null && _goodPoint.RestPayCount > 0) {
+                            int mul = int.Parse(this.comboBox1.SelectedItem.ToString());
+                            var bill = PayQQBill("li", mul, this.label6.Text);
+                            payItem.PayAmount = QQMoneys[1]*mul;
                             payItem.IsPay = "已下单";
-                            payItem.PayAmount = PayMoneys[chaseCount];
-                            payItem.Balance = double.Parse(bill.data.balance);
+                            payItem.Balance = this.GetBalance();
                             lblBalance.Text = payItem.Balance.ToString();
-                        }
-                        //如果失败次数大等于3次，判断前一期是否正常，如果正常就可以下单
-                        else if (IsAutoPay && failedCount >= 3 && OnlyPairModel.OnlyPairModelBet(records[records.Count - 1].GoodNo))
-                        {
-                            //发送下单数据
-
-
-                            var bill = PayBill(PayMoneys[chaseCount]);
-
-                            payItem.IsPay = "已下单";
-                            payItem.PayAmount = PayMoneys[chaseCount];
-                            payItem.Balance = double.Parse(bill.data.balance);
-                            
-                            lblBalance.Text = payItem.Balance.ToString();
+                            PayCount = PayCount + 1;
+                            lblpaytotal.Text = PayCount.ToString();
+                            lblflow.Text = (PayCount * payItem.PayAmount).ToString();
+                            _goodPoint.RestPayCount = _goodPoint.RestPayCount - 1;
+                            lblRestPayCount.Text = _goodPoint.RestPayCount.ToString();
                         }
 
                         records.Add(payItem);
@@ -418,6 +699,7 @@ namespace Lottery.FFC
                     {
                         chaseCount = 1;
                         failedCount = 0;
+                        payItem.IsPay = "网站出问题，下单失败";
                         LogHelper.ErrorLog(DateTime.Now.ToString() + " -- 下单失败  -- "  + ex.Message,ex);
                     }
                 }
@@ -453,6 +735,8 @@ namespace Lottery.FFC
                         this.dataGridView2.Rows[index].Cells[1].Value = newRecords[0].GoodNo;
                         this.dataGridView2.Rows[index].Cells[2].Value = newRecords[0].Status;
                         this.dataGridView2.Rows[index].Cells[3].Value = newRecords[0].IsPay;
+                        this.dataGridView2.Rows[index].Cells["killno1"].Value = newRecords[0].Kill3No;
+                        this.dataGridView2.Rows[index].Cells["killno2"].Value = newRecords[0].Kill5No;
 
                     }
 
@@ -513,7 +797,9 @@ namespace Lottery.FFC
         {
             //3. post 登录数据
 
-            var postLoginUrl = "https://www.blgj02.com/login";
+            // var postLoginUrl = "https://www.blgj02.com/login";
+            var postLoginUrl = "http://mj.gud5100.com/api/web-login";
+
             HttpWebRequest request = HttpWebRequest.CreateHttp(postLoginUrl);
             // request.Headers["accept"] = "*/*";
             request.Accept = "*/*";
@@ -532,7 +818,8 @@ namespace Lottery.FFC
             //resp = (HttpWebResponse)request.GetResponse();
             //resp.GetResponseStream();
             var validCode = this.txtvalidCode.Text;
-            var postStr = "user_name=" + txtUserName.Text + "&password=" + txtPassword.Text + "&valid_code=" + validCode + "&g_code=&wechat_web=web&wechat_app=app&u_g=0&command=login";
+            //var postStr = "user_name=" + txtUserName.Text + "&password=" + txtPassword.Text + "&valid_code=" + validCode + "&g_code=&wechat_web=web&wechat_app=app&u_g=0&command=login";
+            var postStr = "username="+txtUserName.Text+"&password="+txtPassword.Text+"&securityCode="+txtvalidCode.Text+"";
             if (postStr != null)
             {
                 using (var reqc = request.GetRequestStream())
@@ -546,6 +833,9 @@ namespace Lottery.FFC
 
             var stream = rsp.GetResponseStream();
             _loginCookie = rsp.Headers.Get("Set-Cookie");//获取登录后的cookie值。
+            if (string.IsNullOrEmpty(_loginCookie)) {
+                _loginCookie = _cookie;
+            }
             List<byte> bytes = new List<byte>();
             int temp = stream.ReadByte();
             while (temp != -1)
@@ -559,24 +849,29 @@ namespace Lottery.FFC
 
             //stream.Write(bytes, 0, (int)stream.Length);
             string rspStr = Encoding.GetEncoding("UTF-8").GetString(byteFile);
-            Res_LoginResult rlt = new Res_LoginResult();
-            try
-            {
-                rlt = JsonConvert.DeserializeObject<Res_LoginResult>(rspStr);
-            }
-            catch (Exception ex)
-            {
+            //Res_LoginResult rlt = new Res_LoginResult();
+            //try
+            //{
+            //    rlt = JsonConvert.DeserializeObject<Res_LoginResult>(rspStr);
+            //}
+            //catch (Exception ex)
+            //{
 
-                MessageBox.Show("登录失败： " + rspStr + " 异常：" + ex.Message);
-            }
+            //    MessageBox.Show("登录失败： " + rspStr + " 异常：" + ex.Message);
+            //}
 
-            if (rlt.success == 1)
+            if (rspStr.Contains("请求成功"))
             {
                 lblLoginStatus.Text = "登录成功";
                 lblLoginStatus.ForeColor = Color.Green;
-                lblBalance.Text = rlt.data.money.ToString();
+             //   lblBalance.Text = rlt.data.money.ToString();
                 lblBalance.ForeColor = Color.Orange;
-                lblUserId.Text = rlt.data.user_id;
+                lblOrBalance.ForeColor = Color.Orange;
+                //  lblUserId.Text = rlt.data.user_id;
+                OriginBalance = this.GetBalance();
+                lblBalance.Text = OriginBalance.ToString();
+                lblOrBalance.Text = OriginBalance.ToString();
+                _isLogin = true;
             }
             else
             {
@@ -584,6 +879,29 @@ namespace Lottery.FFC
                 lblLoginStatus.ForeColor = Color.Red;
             }
             //return rspStr;
+        }
+
+        private double GetBalance() {
+            double balance = 0;
+            try
+            {
+                var baUrl = "http://mj.gud5100.com/api/web-ajax/loop-page";
+                var baRes = Util.getURLResponseStr(baUrl, _cookie);
+                var baRlt = JsonConvert.DeserializeObject<Res_Minjue_BalanceResult>(baRes);
+                balance = baRlt.data.lotteryBalance;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLog("获取余额失败：" + ex.Message, ex);
+                return balance;
+            }
+            return balance;
+
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            this.PayQQBill();
         }
     }
 }
