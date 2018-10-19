@@ -107,6 +107,8 @@ namespace Lottery.FFC
 
         private bool IsBellow = false;
 
+        private bool IsArriveWinPoint = false;
+
         
         private void IsBelowPayRate() {
             if (IsBellow == false) {
@@ -299,6 +301,10 @@ namespace Lottery.FFC
             //        this.Switch();
             //    }
             //}
+            if (IsArriveWinPoint) {
+                IsArriveWinPoint = false;
+                refreshStatus();
+            }
             IsBelowPayRate();
 
             var lottery_id = 10014;
@@ -502,80 +508,6 @@ namespace Lottery.FFC
             return isSuccess;
         } 
 
-        //private Res_Pay PayBill(double money) {
-        //    var payCount = 0;
-        //    if (money == 1.68)
-        //    {
-        //        payCount = 1;
-        //    }
-        //    else if (money == 3.36) {
-
-        //        payCount = 2;
-        //    }
-        //    else if (money == 6.72)
-        //    {
-
-        //        payCount = 4;
-        //    }
-        //    else if (money == 15.12)
-        //    {
-
-        //        payCount = 9;
-        //    }
-        //    else if (money == 30.24)
-        //    {
-
-        //        payCount = 18;
-        //    }
-        //    else if (money == 63.84)
-        //    {
-
-        //        payCount = 38;
-        //    }
-        //    else if (money == 131.04)
-        //    {
-
-        //        payCount = 78;
-        //    }
-        //    else if (money == 273.84)
-        //    {
-
-        //        payCount = 163;
-        //    }
-        //    else if (money == 566.16)
-        //    {
-
-        //        payCount = 337;
-        //    }
-        //    else if (money == 1176)
-        //    {
-
-        //        payCount = 700;
-        //    }
-        //    else if (money == 2441.04)
-        //    {
-
-        //        payCount = 1453;
-        //    }
-        //    else if (money == 5065.20)
-        //    {
-
-        //        payCount = 3015;
-        //    }
-
-        //    //var cookie = this.textBox1.Text;
-        //    var postParam = @"command=lottery_logon_request_transmit_v2&param=%7B%22command_id%22%3A521%2C%22lottery_id%22%3A%2210014%22%2C%22issue%22%3A%22"+predictNum+"%22%2C%22count%22%3A1%2C%22bet_info%22%3A%5B%7B%22method_id%22%3A%22150042%22%2C%22number%22%3A%220123456789%2C0123456789%22%2C%22rebate_count%22%3A75%2C%22multiple%22%3A%22"+payCount+"%22%2C%22mode%22%3A3%2C%22bet_money%22%3A%22"+ money + "%22%2C%22calc_type%22%3A%220%22%7D%5D%7D";
-
-        //    LogHelper.InfoLog(DateTime.Now.ToString() + "  -- "   + postParam);
-           
-        //    var res = Util.getURLResponseStr(PayUrl, _loginCookie, postParam);
-
-        //    LogHelper.InfoLog(DateTime.Now.ToString() + "  -- "  + res);
-
-        //    return JsonConvert.DeserializeObject<Res_Pay>(res);
-
-        //}
-
 
         private void UpdatePayMoneyAndChase(string goodNum,string ispay) {
             if (!failedNums.Contains(goodNum))
@@ -616,6 +548,7 @@ namespace Lottery.FFC
             IsAutoPay = !IsAutoPay;
             this.button2.Text = IsAutoPay != true ? "开启下单" : "关闭下单";
             refreshStatus();
+            IsArriveWinPoint = true;
             timer2.Stop();
             return;
         }
@@ -627,12 +560,6 @@ namespace Lottery.FFC
             }
             timer2.Stop();
 
-            //追12手追不到自动停
-            //if (chaseCount > 12) {
-            //    IsAutoPay = !IsAutoPay;
-            //    this.button2.Text = IsAutoPay != true ? "开启自动下单" : "关闭自动下单";
-            //    return;
-            //}
             var bal = this.GetBalance();
             if (bal == 0) {
                 timer2.Start();
