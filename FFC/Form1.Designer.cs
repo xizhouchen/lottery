@@ -71,9 +71,6 @@
             this.txtLossStop = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.txtPayPoint = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.radioUp = new System.Windows.Forms.RadioButton();
-            this.radioDown = new System.Windows.Forms.RadioButton();
             this.lblflow = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.lblpaytotal = new System.Windows.Forms.Label();
@@ -82,6 +79,20 @@
             this.lblstopissue = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.lblRestPayCount = new System.Windows.Forms.Label();
+            this.rdoYesW = new System.Windows.Forms.RadioButton();
+            this.rdonoW = new System.Windows.Forms.RadioButton();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.txt1shou = new System.Windows.Forms.TextBox();
+            this.txt2shou = new System.Windows.Forms.TextBox();
+            this.txt3shou = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.txtBellow = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.txtLatest = new System.Windows.Forms.TextBox();
+            this.lblCurRate = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -108,6 +119,11 @@
             this.groupBox1.Controls.Add(this.dataGridView1);
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.button4);
+            this.groupBox1.Controls.Add(this.label21);
+            this.groupBox1.Controls.Add(this.label13);
+            this.groupBox1.Controls.Add(this.lblstopissue);
+            this.groupBox1.Controls.Add(this.lblRestPayCount);
+            this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.groupBox1.Location = new System.Drawing.Point(502, 12);
             this.groupBox1.Name = "groupBox1";
@@ -184,11 +200,11 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(320, 203);
+            this.label3.Location = new System.Drawing.Point(302, 203);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 24);
+            this.label3.Size = new System.Drawing.Size(86, 24);
             this.label3.TabIndex = 7;
-            this.label3.Text = "label2";
+            this.label3.Text = "是否观察";
             this.label3.Visible = false;
             // 
             // label4
@@ -220,7 +236,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(849, 203);
+            this.label5.Location = new System.Drawing.Point(678, 203);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(105, 24);
             this.label5.TabIndex = 7;
@@ -231,7 +247,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(950, 203);
+            this.label6.Location = new System.Drawing.Point(779, 203);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(90, 24);
             this.label6.TabIndex = 7;
@@ -243,7 +259,7 @@
             this.dataGridView2.AllowUserToAddRows = false;
             this.dataGridView2.AllowUserToDeleteRows = false;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(20, 314);
+            this.dataGridView2.Location = new System.Drawing.Point(20, 336);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.Size = new System.Drawing.Size(1064, 338);
@@ -398,10 +414,11 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.Location = new System.Drawing.Point(117, 240);
+            this.label15.Location = new System.Drawing.Point(14, 70);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(0, 20);
             this.label15.TabIndex = 20;
+            this.label15.Visible = false;
             // 
             // label14
             // 
@@ -468,10 +485,11 @@
             "800",
             "900",
             "1000"});
-            this.comboBox1.Location = new System.Drawing.Point(862, 258);
+            this.comboBox1.Location = new System.Drawing.Point(520, 185);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(69, 32);
             this.comboBox1.TabIndex = 24;
+            this.comboBox1.Visible = false;
             // 
             // label16
             // 
@@ -488,18 +506,19 @@
             // 
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label17.Location = new System.Drawing.Point(788, 263);
+            this.label17.Location = new System.Drawing.Point(446, 190);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(43, 20);
             this.label17.TabIndex = 18;
             this.label17.Text = "倍数";
+            this.label17.Visible = false;
             // 
             // txtStopWin
             // 
             this.txtStopWin.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtStopWin.Location = new System.Drawing.Point(530, 259);
+            this.txtStopWin.Location = new System.Drawing.Point(85, 260);
             this.txtStopWin.Name = "txtStopWin";
-            this.txtStopWin.Size = new System.Drawing.Size(65, 26);
+            this.txtStopWin.Size = new System.Drawing.Size(52, 26);
             this.txtStopWin.TabIndex = 12;
             this.txtStopWin.Text = "1";
             // 
@@ -507,7 +526,7 @@
             // 
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label18.Location = new System.Drawing.Point(481, 262);
+            this.label18.Location = new System.Drawing.Point(36, 263);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(43, 20);
             this.label18.TabIndex = 23;
@@ -516,9 +535,9 @@
             // txtLossStop
             // 
             this.txtLossStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtLossStop.Location = new System.Drawing.Point(679, 260);
+            this.txtLossStop.Location = new System.Drawing.Point(201, 261);
             this.txtLossStop.Name = "txtLossStop";
-            this.txtLossStop.Size = new System.Drawing.Size(72, 26);
+            this.txtLossStop.Size = new System.Drawing.Size(54, 26);
             this.txtLossStop.TabIndex = 12;
             this.txtLossStop.Text = "1000";
             // 
@@ -526,7 +545,7 @@
             // 
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label19.Location = new System.Drawing.Point(630, 262);
+            this.label19.Location = new System.Drawing.Point(152, 263);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(43, 20);
             this.label19.TabIndex = 23;
@@ -541,41 +560,6 @@
             this.txtPayPoint.TabIndex = 12;
             this.txtPayPoint.Text = "0.3344";
             this.txtPayPoint.Visible = false;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label20.Location = new System.Drawing.Point(366, 21);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(60, 20);
-            this.label20.TabIndex = 23;
-            this.label20.Text = "下单点";
-            this.label20.Visible = false;
-            // 
-            // radioUp
-            // 
-            this.radioUp.AutoSize = true;
-            this.radioUp.Location = new System.Drawing.Point(380, 47);
-            this.radioUp.Name = "radioUp";
-            this.radioUp.Size = new System.Drawing.Size(37, 17);
-            this.radioUp.TabIndex = 25;
-            this.radioUp.TabStop = true;
-            this.radioUp.Text = "上";
-            this.radioUp.UseVisualStyleBackColor = true;
-            this.radioUp.Visible = false;
-            // 
-            // radioDown
-            // 
-            this.radioDown.AutoSize = true;
-            this.radioDown.Location = new System.Drawing.Point(423, 47);
-            this.radioDown.Name = "radioDown";
-            this.radioDown.Size = new System.Drawing.Size(37, 17);
-            this.radioDown.TabIndex = 25;
-            this.radioDown.TabStop = true;
-            this.radioDown.Text = "下";
-            this.radioDown.UseVisualStyleBackColor = true;
-            this.radioDown.Visible = false;
             // 
             // lblflow
             // 
@@ -619,51 +603,204 @@
             // 
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label21.Location = new System.Drawing.Point(205, 260);
+            this.label21.Location = new System.Drawing.Point(102, 90);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(124, 24);
             this.label21.TabIndex = 7;
             this.label21.Text = "下单终止期：";
+            this.label21.Visible = false;
             // 
             // lblstopissue
             // 
             this.lblstopissue.AutoSize = true;
             this.lblstopissue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblstopissue.ForeColor = System.Drawing.Color.Green;
-            this.lblstopissue.Location = new System.Drawing.Point(328, 260);
+            this.lblstopissue.Location = new System.Drawing.Point(225, 90);
             this.lblstopissue.Name = "lblstopissue";
             this.lblstopissue.Size = new System.Drawing.Size(16, 24);
             this.lblstopissue.TabIndex = 7;
             this.lblstopissue.Text = "-";
+            this.lblstopissue.Visible = false;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label13.Location = new System.Drawing.Point(16, 260);
+            this.label13.Location = new System.Drawing.Point(-87, 90);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(124, 24);
             this.label13.TabIndex = 7;
             this.label13.Text = "剩余下单量：";
+            this.label13.Visible = false;
             // 
             // lblRestPayCount
             // 
             this.lblRestPayCount.AutoSize = true;
             this.lblRestPayCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblRestPayCount.ForeColor = System.Drawing.Color.Green;
-            this.lblRestPayCount.Location = new System.Drawing.Point(139, 260);
+            this.lblRestPayCount.Location = new System.Drawing.Point(36, 90);
             this.lblRestPayCount.Name = "lblRestPayCount";
             this.lblRestPayCount.Size = new System.Drawing.Size(16, 24);
             this.lblRestPayCount.TabIndex = 7;
             this.lblRestPayCount.Text = "-";
+            this.lblRestPayCount.Visible = false;
+            // 
+            // rdoYesW
+            // 
+            this.rdoYesW.AutoSize = true;
+            this.rdoYesW.Location = new System.Drawing.Point(873, 266);
+            this.rdoYesW.Name = "rdoYesW";
+            this.rdoYesW.Size = new System.Drawing.Size(37, 17);
+            this.rdoYesW.TabIndex = 26;
+            this.rdoYesW.TabStop = true;
+            this.rdoYesW.Text = "是";
+            this.rdoYesW.UseVisualStyleBackColor = true;
+            // 
+            // rdonoW
+            // 
+            this.rdonoW.AutoSize = true;
+            this.rdonoW.Location = new System.Drawing.Point(916, 266);
+            this.rdonoW.Name = "rdonoW";
+            this.rdonoW.Size = new System.Drawing.Size(37, 17);
+            this.rdonoW.TabIndex = 27;
+            this.rdonoW.TabStop = true;
+            this.rdonoW.Text = "否";
+            this.rdonoW.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label20.Location = new System.Drawing.Point(769, 260);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(86, 24);
+            this.label20.TabIndex = 28;
+            this.label20.Text = "是否观察";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label23.Location = new System.Drawing.Point(397, 263);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(35, 20);
+            this.label23.TabIndex = 31;
+            this.label23.Text = "2手";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label25.Location = new System.Drawing.Point(289, 263);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(35, 20);
+            this.label25.TabIndex = 32;
+            this.label25.Text = "1手";
+            // 
+            // txt1shou
+            // 
+            this.txt1shou.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txt1shou.Location = new System.Drawing.Point(338, 260);
+            this.txt1shou.Name = "txt1shou";
+            this.txt1shou.Size = new System.Drawing.Size(40, 26);
+            this.txt1shou.TabIndex = 30;
+            this.txt1shou.Text = "1";
+            // 
+            // txt2shou
+            // 
+            this.txt2shou.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txt2shou.Location = new System.Drawing.Point(438, 260);
+            this.txt2shou.Name = "txt2shou";
+            this.txt2shou.Size = new System.Drawing.Size(40, 26);
+            this.txt2shou.TabIndex = 33;
+            this.txt2shou.Text = "3";
+            // 
+            // txt3shou
+            // 
+            this.txt3shou.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txt3shou.Location = new System.Drawing.Point(542, 261);
+            this.txt3shou.Name = "txt3shou";
+            this.txt3shou.Size = new System.Drawing.Size(40, 26);
+            this.txt3shou.TabIndex = 35;
+            this.txt3shou.Text = "5";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label26.Location = new System.Drawing.Point(501, 264);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(35, 20);
+            this.label26.TabIndex = 34;
+            this.label26.Text = "3手";
+            // 
+            // txtBellow
+            // 
+            this.txtBellow.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtBellow.Location = new System.Drawing.Point(438, 304);
+            this.txtBellow.Name = "txtBellow";
+            this.txtBellow.Size = new System.Drawing.Size(40, 26);
+            this.txtBellow.TabIndex = 39;
+            this.txtBellow.Text = "0.83";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label27.Location = new System.Drawing.Point(399, 307);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(43, 20);
+            this.label27.TabIndex = 37;
+            this.label27.Text = "低于";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label28.Location = new System.Drawing.Point(291, 307);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(43, 20);
+            this.label28.TabIndex = 38;
+            this.label28.Text = "最近";
+            // 
+            // txtLatest
+            // 
+            this.txtLatest.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtLatest.Location = new System.Drawing.Point(340, 304);
+            this.txtLatest.Name = "txtLatest";
+            this.txtLatest.Size = new System.Drawing.Size(40, 26);
+            this.txtLatest.TabIndex = 36;
+            this.txtLatest.Text = "240";
+            // 
+            // lblCurRate
+            // 
+            this.lblCurRate.AutoSize = true;
+            this.lblCurRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblCurRate.Location = new System.Drawing.Point(501, 303);
+            this.lblCurRate.Name = "lblCurRate";
+            this.lblCurRate.Size = new System.Drawing.Size(16, 24);
+            this.lblCurRate.TabIndex = 40;
+            this.lblCurRate.Text = "-";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1102, 698);
-            this.Controls.Add(this.radioDown);
-            this.Controls.Add(this.radioUp);
+            this.Controls.Add(this.lblCurRate);
+            this.Controls.Add(this.txtBellow);
+            this.Controls.Add(this.label27);
+            this.Controls.Add(this.label28);
+            this.Controls.Add(this.txtLatest);
+            this.Controls.Add(this.txt3shou);
+            this.Controls.Add(this.label26);
+            this.Controls.Add(this.txt2shou);
+            this.Controls.Add(this.label23);
+            this.Controls.Add(this.label25);
+            this.Controls.Add(this.txt1shou);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.rdonoW);
+            this.Controls.Add(this.rdoYesW);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lblUserId);
@@ -675,12 +812,10 @@
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.label15);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label19);
-            this.Controls.Add(this.label20);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.txtLossStop);
@@ -700,10 +835,6 @@
             this.Controls.Add(this.lblpaytotal);
             this.Controls.Add(this.lblflow);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.lblRestPayCount);
-            this.Controls.Add(this.lblstopissue);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.label21);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label1);
@@ -764,9 +895,6 @@
         private System.Windows.Forms.TextBox txtLossStop;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox txtPayPoint;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.RadioButton radioUp;
-        private System.Windows.Forms.RadioButton radioDown;
         private System.Windows.Forms.Label lblflow;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label lblpaytotal;
@@ -775,6 +903,20 @@
         private System.Windows.Forms.Label lblstopissue;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label lblRestPayCount;
+        private System.Windows.Forms.RadioButton rdoYesW;
+        private System.Windows.Forms.RadioButton rdonoW;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TextBox txt1shou;
+        private System.Windows.Forms.TextBox txt2shou;
+        private System.Windows.Forms.TextBox txt3shou;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox txtBellow;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox txtLatest;
+        private System.Windows.Forms.Label lblCurRate;
     }
 }
 

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Lottery.PlatForm
 {
+
     public abstract class IPlatForm
     {
        
@@ -155,23 +156,67 @@ namespace Lottery.PlatForm
             return balance;
         }
 
-        public virtual bool MakeOrder(string model = "li", int multiple = 1, string content = "0,1,2,3,4,5,6,7")
+    
+
+        public virtual bool MakeOrder(string model = "li", int multiple = 1, string content = "0,1,2,3,4,5,6,7",string method = "sxzuxzlh")
         {
-            bool isSuccess = false;
-            var data = System.Web.HttpUtility.UrlEncode("[{\"lottery\":\"qqmin\",\"issue\":\"\",\"method\":\"sxzuxzlh\",\"content\":\"" + content + "\",\"model\":\"" + model + "\",\"multiple\":" + multiple + ",\"code\":1976,\"compress\":false}]");
-            var postParam = @"text=%5B%7B%22lottery%22%3A%22qqmin%22%2C%22issue%22%3A%22%22%2C%22method%22%3A%22sxzuxzlh%22%2C%22content%22%3A%220%2C1%2C2%2C3%2C4%2C5%2C6%2C7%22%2C%22model%22%3A%22li%22%2C%22multiple%22%3A1%2C%22code%22%3A1976%2C%22compress%22%3Afalse%7D%5D";
-            postParam = "text=" + data;
-            LogHelper.InfoLog(DateTime.Now.ToString() + "  -- " + postParam);
+            while (true) {
+                try
+                {
+                    bool isSuccess = false;
+                    var data = System.Web.HttpUtility.UrlEncode("[{\"lottery\":\"qqmin\",\"issue\":\"\",\"method\":\"" + method + "\",\"content\":\"" + content + "\",\"model\":\"" + model + "\",\"multiple\":" + multiple + ",\"code\":1976,\"compress\":false}]");
+                    var postParam = @"text=%5B%7B%22lottery%22%3A%22qqmin%22%2C%22issue%22%3A%22%22%2C%22method%22%3A%22sxzuxzlh%22%2C%22content%22%3A%220%2C1%2C2%2C3%2C4%2C5%2C6%2C7%22%2C%22model%22%3A%22li%22%2C%22multiple%22%3A1%2C%22code%22%3A1976%2C%22compress%22%3Afalse%7D%5D";
+                    postParam = "text=" + data;
+                    LogHelper.InfoLog(DateTime.Now.ToString() + "  -- " + postParam);
 
-            var res = Util.getURLResponseStr(OrderUrl, LoginedCookie, postParam);
-            if (res.Contains("请求成功"))
-            {
-                isSuccess = true;
+                    var res = Util.getURLResponseStr(OrderUrl, LoginedCookie, postParam);
+                    if (res.Contains("请求成功"))
+                    {
+                        isSuccess = true;
+                    }
+
+
+                    LogHelper.InfoLog(DateTime.Now.ToString() + "  -- " + res);
+                    return isSuccess;
+                }
+                catch (Exception ex) {
+                    LogHelper.ErrorLog(DateTime.Now.ToString() + "下单失败  -- " + ex.Message,ex);
+                }
             }
+           
+        }
 
+        public virtual string GetBackKillTwoMethodName() {
+            return "sxzuxzlh";
+        }
 
-            LogHelper.InfoLog(DateTime.Now.ToString() + "  -- " + res);
-            return isSuccess;
+        public virtual string GetFrontKillTwoMethodName()
+        {
+            return "front";
+        }
+
+        public virtual string GetMiddleKillTwoMethodName()
+        {
+            return "middle";
+        }
+
+        /// <summary>
+        /// 获取最新的可以下注的期号
+        /// </summary>
+        /// <returns></returns>
+        public virtual string GetNextIssueId(string lastIssueId) {
+            var afterspli = lastIssueId.Split(new char[] { '-' });
+            var seq = afterspli[0] + afterspli[1];
+            var predictNum = (Int64.Parse(seq) + 1).ToString();
+
+            if (predictNum.Contains("1440"))
+            {
+                DateTime date = DateTime.Parse(lastIssueId.Substring(0, 4) + "-" + lastIssueId.Substring(4, 2) + "-" + lastIssueId.Substring(6, 2));
+
+                predictNum = date.AddDays(1).ToString("yyyyMMdd") + "0001";
+            }
+            predictNum = predictNum.Substring(0, 8) + "-" + predictNum.Substring(8, 4);
+            return predictNum;
         }
     }
 }

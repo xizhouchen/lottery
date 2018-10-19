@@ -28,7 +28,7 @@ namespace Lottery.Model
 
 
        
-
+        public DateTime CreatedOn { get; set; }
         public string RewardDate { get; set; }
 
         /// <summary>

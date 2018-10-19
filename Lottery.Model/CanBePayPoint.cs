@@ -8,6 +8,7 @@ namespace Lottery.Model
 {
     public class CanBePayPoint
     {
+        public int Id { get; set; }
         public string PayIssueId { get; set; }
 
         public string StartDate { get; set; }
@@ -23,6 +24,18 @@ namespace Lottery.Model
 
         public int WinCount { get; set; }
 
+        public double WinRate { get; set; }
+
+        public DateTime StartDateTime { get; set; }
+
+        public double Balance { get; set; }
+
+        public string IsWin { get; set; }
+
+        public DateTime EndDateTime { get; set; }
+
+        public double MaxBalance { get; set; }
+
         /// <summary>
         /// 能被下单的数量
         /// </summary>
@@ -32,6 +45,7 @@ namespace Lottery.Model
         {
             get
             {
+                return null;
                 var temp = this.PayIssueId.Split(new char[] { '-' });
                 int first = int.Parse(temp[1]);
                 int last = first + this.RestPayCount;

@@ -13,6 +13,11 @@ namespace Lottery.Business
         {
 
         }
+
+        public override List<CanBePayPoint> FindPayPoints(int splitNum = 455)
+        {
+            return base.FindPayPoints(splitNum);
+        }
         public override List<DB_PredictRecord> GenerateAmountResult(double balance, double firstBet, int chaseNum, double benifitRate, BetModel model,double benifitRate2)
         {
             //throw new NotImplementedException();

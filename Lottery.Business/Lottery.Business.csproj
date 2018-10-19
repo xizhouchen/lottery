@@ -62,6 +62,10 @@
       <Project>{688e52de-3207-427d-8ded-d853d89ada76}</Project>
       <Name>Lottery.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Lottery.PlatForm\Lottery.PlatForm.csproj">
+      <Project>{5d7196cf-a9d8-4e2f-a1e9-5c838428b3e5}</Project>
+      <Name>Lottery.PlatForm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

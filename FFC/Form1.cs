@@ -14,14 +14,22 @@ using Newtonsoft.Json;
 using RestSharp;
 using CommonFunction;
 using Lottery.Model;
+using Lottery.Business;
 
 namespace Lottery.FFC
 {
     public partial class Form1 : Form
     {
+
+        private int latestQi = 240;
+
+        private double payRate = 0.83;
+
         private string _cookie;
 
         private string _loginCookie;
+
+        private int WatcingFailedCount;
 
         private Lottery.Business.LotteryBusiness _lb = new Business.LotteryBusiness();
 
@@ -65,7 +73,7 @@ namespace Lottery.FFC
 
        // private string minjueCookie = "SESSION=590458bc-4298-4b48-835c-8f15d2dbfbfd";
 
-        private string minjuePost = "name=qqmin&query=latest-30";
+        private string minjuePost = "name=qqmin&query=latest-100";
 
         private bool _isLogin = false;
 
@@ -94,6 +102,30 @@ namespace Lottery.FFC
         private DateTime autoEndTime = DateTime.Now;
 
         private CanBePayPoint _goodPoint;
+
+        private Dictionary<int, int> PayMultily = new Dictionary<int, int>();
+
+        private bool IsBellow = false;
+
+        
+        private void IsBelowPayRate() {
+            if (IsBellow == false) {
+                this.latestQi = int.Parse(txtLatest.Text);
+                this.payRate = double.Parse(txtBellow.Text);
+                LotteryBusiness lb = new LotteryBusiness();
+                var list = lb.GetLoRecordsByLast(this.latestQi + 100);
+                list = list.OrderBy(r => r.IssueId).ToList();
+                AnalysisBusiness ab = new AnalysisBusiness(BetModel.KillTowNo, list);
+                list = ab.GenerateAmountResult(1, 2, 3, 0.4, BetModel.KillTowNo, 0.4);
+                var anModel = ab.GenerateAnalysisModel(list);
+                double rate = (double)anModel.CycleWinNum / (double)anModel.CycleTotalNum;
+                lblCurRate.Text = rate.ToString("P");
+                if (rate < this.payRate)
+                {
+                    IsBellow = true;
+                }
+            }
+        }
 
         public Form1()
         {
@@ -130,8 +162,12 @@ namespace Lottery.FFC
             PayMoneys[12] = 5065.200;
             //this.IsAutoPay = true;
 
-            QQMoneys[1] = 0.056;
+            QQMoneys[1] = 0.512;
 
+
+            PayMultily.Add(1, 1);
+            PayMultily.Add(2, 3);
+            PayMultily.Add(3, 5);
          
         
            
@@ -141,7 +177,8 @@ namespace Lottery.FFC
         {
             try
             {
-                this.radioDown.Checked = true;
+                this.rdoYesW.Checked = true;
+                
                 this.comboBox1.SelectedIndex = 0;
                 //1. 获取登录页面
                 Random dom = new Random();
@@ -230,9 +267,7 @@ namespace Lottery.FFC
                 }
             }
             int isUp = 0;
-            if (radioUp.Checked == true) {
-                isUp = 1;
-            }
+         
             Lottery.Business.LotteryBusiness lb = new Business.LotteryBusiness();
             lb.InsertAutoRecord(payCount, payTotal, payWinTime, payFailedTime, this.BasePayPoint,
                 this.autoStartTime, this.autoEndTime, lowestBalance, isUp, txtUserName.Text,this.OriginBalance,this.GetBalance());
@@ -251,20 +286,20 @@ namespace Lottery.FFC
             timer1.Stop();
 
             //刷新计算下单点
-            var his = _lb.GetLastRecordsByPage();
-            his = his.OrderBy(r => r.IssueId).ToList();
-            OnlyKill2Model.History = his;
-            if (_goodPoint == null)
-            {
-                _goodPoint = OnlyKill2Model.FindPayPoint();
-                if (_goodPoint != null)
-                {
-                    lblstopissue.Text = _goodPoint.StopIssueId;
-                    lblRestPayCount.Text = _goodPoint.RestPayCount.ToString();
-                    this.Switch();
-                }
-            }
-
+            //var his = _lb.GetLastRecordsByPage();
+            //his = his.OrderBy(r => r.IssueId).ToList();
+            //OnlyKill2Model.History = his;
+            //if (_goodPoint == null)
+            //{
+            //    _goodPoint = OnlyKill2Model.FindPayPoint();
+            //    if (_goodPoint != null)
+            //    {
+            //        lblstopissue.Text = _goodPoint.StopIssueId;
+            //        lblRestPayCount.Text = _goodPoint.RestPayCount.ToString();
+            //        this.Switch();
+            //    }
+            //}
+            IsBelowPayRate();
 
             var lottery_id = 10014;
             try
@@ -296,7 +331,9 @@ namespace Lottery.FFC
 
 
                 DB_PredictRecord dr = new DB_PredictRecord();
-                var nums = OnlyKill2Model.GetTwoKillNo(qqrlt.data.result.Count, this.Convert(qqrlt.data.result),ref dr);//Util.PredictResult(lotteryRlts);
+                var dblist = this.Convert(qqrlt.data.result);
+                dblist.Add(new DB_PredictRecord() { });
+                var nums = OnlyKill2Model.GetTwoKillNo_Individual(dblist.Count - 1, dblist);//Util.PredictResult(lotteryRlts);
 
                 foreach (var item in lotteryRlts)
                 {
@@ -324,7 +361,7 @@ namespace Lottery.FFC
                     {
                         if (selectNum.Length != 14)
                         {
-                            selectNum += i.ToString() + ",";
+                            selectNum += i.ToString();
                         }
                         else {
                             selectNum += i.ToString();
@@ -332,7 +369,7 @@ namespace Lottery.FFC
                        
                     }
                 }
-                label6.Text = selectNum;
+                label6.Text = "-,-," + selectNum+"," + selectNum + "," + selectNum;
 
                 this.label1.Visible = true;
                 this.label2.Visible = true;
@@ -364,9 +401,11 @@ namespace Lottery.FFC
                 this.txtStopWin.Enabled = true;
                 this.txtPayPoint.Enabled = true;
                 this.comboBox1.Enabled = true;
-
-                this.radioDown.Enabled = true;
-                this.radioUp.Enabled = true;
+                this.txt1shou.Enabled = true;
+                this.txt2shou.Enabled = true;
+                this.txt3shou.Enabled = true;
+                rdonoW.Enabled = true;
+                rdoYesW.Enabled = true;
                 //开启时还原到0
 
 
@@ -389,13 +428,19 @@ namespace Lottery.FFC
             }
             else
             {
+                timer2.Start();
                 this.txtLossStop.Enabled = false;
                 this.txtStopWin.Enabled = false;
                 this.txtPayPoint.Enabled = false;
                 this.comboBox1.Enabled = false;
-                this.radioDown.Enabled = false;
-                this.radioUp.Enabled = false;
+
+                this.txt1shou.Enabled = false;
+                this.txt2shou.Enabled = false;
+                this.txt3shou.Enabled = false;
+                rdonoW.Enabled = false;
+                rdoYesW.Enabled = false;
                 //关闭后刷新原始金额
+                WatcingFailedCount = 0; //刷新观察
                 this.OriginBalance = this.GetBalance();
                 this.lblOrBalance.Text = this.OriginBalance.ToString();
                 this.lblBalance.Text = this.OriginBalance.ToString();
@@ -410,10 +455,13 @@ namespace Lottery.FFC
             {
                 if (lblLoginStatus.Text == "登录成功")
                 {
-                    if (_goodPoint == null && IsAutoPay == false) {
-                        MessageBox.Show("当前期不是下单点，如果为下单点会自动开启下单");
-                        return;
-                    }
+                    PayMultily[1] = int.Parse(txt1shou.Text);
+                    PayMultily[2] = int.Parse(txt2shou.Text);
+                    PayMultily[3] = int.Parse(txt3shou.Text);
+                    //if (_goodPoint == null && IsAutoPay == false) {
+                    //    MessageBox.Show("当前期不是下单点，如果为下单点会自动开启下单");
+                    //    return;
+                    //}
                     
                     IsAutoPay = !IsAutoPay;
                     this.button2.Text = IsAutoPay != true ? "开启下单" : "关闭下单";
@@ -436,9 +484,10 @@ namespace Lottery.FFC
         }
 
 
-        private bool PayQQBill(string model = "li",int multiple = 1,string content = "0,1,2,3,4,5,6,7") {
+        private bool PayQQBill(string model = "li",int multiple = 1,string content = "-,-,01234567,01234567,01234567") {
             bool isSuccess = false;
             var data = System.Web.HttpUtility.UrlEncode("[{\"lottery\":\"qqmin\",\"issue\":\"\",\"method\":\"sxzuxzlh\",\"content\":\""+content+"\",\"model\":\""+model+"\",\"multiple\":"+multiple+",\"code\":1976,\"compress\":false}]");
+            data = System.Web.HttpUtility.UrlEncode("[{\"lottery\":\"qqmin\",\"issue\":\"\",\"method\":\"sxzhixfsh\",\"content\":\"" + content + "\",\"model\":\"" + model + "\",\"multiple\":" + multiple + ",\"code\":1976,\"compress\":false}]");
             var postParam = @"text=%5B%7B%22lottery%22%3A%22qqmin%22%2C%22issue%22%3A%22%22%2C%22method%22%3A%22sxzuxzlh%22%2C%22content%22%3A%220%2C1%2C2%2C3%2C4%2C5%2C6%2C7%22%2C%22model%22%3A%22li%22%2C%22multiple%22%3A1%2C%22code%22%3A1976%2C%22compress%22%3Afalse%7D%5D";
             postParam = "text=" + data;
             LogHelper.InfoLog(DateTime.Now.ToString() + "  -- " + postParam);
@@ -535,6 +584,12 @@ namespace Lottery.FFC
                 failedCount++;
                 if(ispay == "已下单")
                     chaseCount++;
+                if (chaseCount == 4) {
+                    chaseCount = 1;
+                }
+                if (ispay == "未下单") {
+                    WatcingFailedCount++;
+                }
             }
             else {
 
@@ -561,7 +616,7 @@ namespace Lottery.FFC
             IsAutoPay = !IsAutoPay;
             this.button2.Text = IsAutoPay != true ? "开启下单" : "关闭下单";
             refreshStatus();
-            timer2.Start();
+            timer2.Stop();
             return;
         }
         private void timer2_Tick(object sender, EventArgs e)
@@ -596,28 +651,30 @@ namespace Lottery.FFC
             //止损
             if ((bal - this.OriginBalance) >= this.StopWin) {
                 Switch();
+                return;
             }
 
             //止盈
             if (( this.OriginBalance - bal) >= this.StopFailed)
             {
                 Switch();
+                return;
             }
 
-            if (_goodPoint != null && _goodPoint.RestPayCount <= 0)
-            {
-                Switch();
-                _goodPoint = OnlyKill2Model.FindPayPoint();
-                if (_goodPoint != null)
-                {
-                    lblstopissue.Text = _goodPoint.StopIssueId;
-                }
-                else
-                {
-                    //lblstopissue.Text = "-";
-                }
+            //if (_goodPoint != null && _goodPoint.RestPayCount <= 0)
+            //{
+            //    Switch();
+            //    _goodPoint = OnlyKill2Model.FindPayPoint();
+            //    if (_goodPoint != null)
+            //    {
+            //        lblstopissue.Text = _goodPoint.StopIssueId;
+            //    }
+            //    else
+            //    {
+            //        //lblstopissue.Text = "-";
+            //    }
 
-            }
+            //}
            
 
           
@@ -643,19 +700,25 @@ namespace Lottery.FFC
 
                             UpdateFailed(subRecords[0].GoodNo);
 
-                            // UpdatePayMoneyAndChase(lastRecord.CP_QS, subRecords[0].IsPay);
+                             UpdatePayMoneyAndChase(lastRecord.CP_QS, subRecords[0].IsPay);
+                            //if (subRecords[0].IsPay == "未下单") {
+                            //    WatcingFailedCount++;
+                            //}
                         }
                         else
                         {
                             subRecords[0].Status = "中奖";
-
+                            chaseCount = 1;
 
                           
-                            subRecords[0].Earn = subRecords[0].PayAmount * 2.94;
+                            subRecords[0].Earn = subRecords[0].PayAmount * 1.9296;
                             UpdateWin(subRecords[0].GoodNo);
 
+                            if (subRecords[0].IsPay == "未下单")
+                            {
+                                WatcingFailedCount = 0;
+                            }
 
-                          
                         }
 
                      
@@ -677,23 +740,64 @@ namespace Lottery.FFC
 
                     try
                     {
-                       
-                        
-                        if (IsAutoPay && _goodPoint!= null && _goodPoint.RestPayCount > 0) {
-                            int mul = int.Parse(this.comboBox1.SelectedItem.ToString());
-                            var bill = PayQQBill("li", mul, this.label6.Text);
-                            payItem.PayAmount = QQMoneys[1]*mul;
-                            payItem.IsPay = "已下单";
-                            payItem.Balance = this.GetBalance();
-                            lblBalance.Text = payItem.Balance.ToString();
-                            PayCount = PayCount + 1;
-                            lblpaytotal.Text = PayCount.ToString();
-                            lblflow.Text = (PayCount * payItem.PayAmount).ToString();
-                            _goodPoint.RestPayCount = _goodPoint.RestPayCount - 1;
-                            lblRestPayCount.Text = _goodPoint.RestPayCount.ToString();
+
+
+                        //if (IsAutoPay && _goodPoint!= null && _goodPoint.RestPayCount > 0) {
+                        //    int mul = int.Parse(this.comboBox1.SelectedItem.ToString());
+                        //    var bill = PayQQBill("li", mul, this.label6.Text);
+                        //    payItem.PayAmount = QQMoneys[1]*mul;
+                        //    payItem.IsPay = "已下单";
+                        //    payItem.Balance = this.GetBalance();
+                        //    lblBalance.Text = payItem.Balance.ToString();
+                        //    PayCount = PayCount + 1;
+                        //    lblpaytotal.Text = PayCount.ToString();
+                        //    lblflow.Text = (PayCount * payItem.PayAmount).ToString();
+                        //    _goodPoint.RestPayCount = _goodPoint.RestPayCount - 1;
+                        //    lblRestPayCount.Text = _goodPoint.RestPayCount.ToString();
+                        //}
+                        if (rdoYesW.Checked == true)
+                        {
+                            if (IsAutoPay && IsBellow)
+                            {
+                                //int mul = int.Parse(this.comboBox1.SelectedItem.ToString());
+                                int mul = PayMultily[chaseCount];
+                                var bill = PayQQBill("li", mul, this.label6.Text);
+                                records.Add(payItem);
+                                payItem.PayAmount = QQMoneys[1] * mul;
+                                payItem.IsPay = "已下单";
+                                payItem.Balance = this.GetBalance();
+                                lblBalance.Text = payItem.Balance.ToString();
+                                PayCount = PayCount + 1;
+                                lblpaytotal.Text = PayCount.ToString();
+                                //lblflow.Text = (PayCount * payItem.PayAmount).ToString();
+                                //_goodPoint.RestPayCount = _goodPoint.RestPayCount - 1;
+                               // lblRestPayCount.Text = _goodPoint.RestPayCount.ToString();
+                            }
+                        }
+                        else {
+
+                            if (IsAutoPay)
+                            {
+                                //int mul = int.Parse(this.comboBox1.SelectedItem.ToString());
+                                int mul = PayMultily[chaseCount];
+                                var bill = PayQQBill("li", mul, this.label6.Text);
+                               
+                                payItem.PayAmount = QQMoneys[1] * mul;
+                                payItem.IsPay = "已下单";
+                                payItem.Balance = this.GetBalance();
+                                lblBalance.Text = payItem.Balance.ToString();
+                                PayCount = PayCount + 1;
+                                lblpaytotal.Text = PayCount.ToString();
+                                //lblflow.Text = (PayCount * payItem.PayAmount).ToString();
+                                //_goodPoint.RestPayCount = _goodPoint.RestPayCount - 1;
+                               // lblRestPayCount.Text = _goodPoint.RestPayCount.ToString();
+                            }
+
+
                         }
 
                         records.Add(payItem);
+
                     }
                     catch (Exception ex)
                     {

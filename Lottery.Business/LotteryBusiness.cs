@@ -58,6 +58,7 @@ namespace Lottery.Business
                     rd.GoodNo = table.Rows[i]["GoodNo"].ToString();
                     rd.IssueId = table.Rows[i]["IssueId"].ToString();
                     rd.RewardDate = table.Rows[i]["RewardDate"].ToString();
+                    rd.CreatedOn = (DateTime)table.Rows[i]["CreatedOn"];
                     col.Add(rd);
                 }
             }

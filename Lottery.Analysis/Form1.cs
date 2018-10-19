@@ -69,7 +69,7 @@ namespace Lottery.Analysis
             ///分析模型
             var anModel = ab.GenerateAnalysisModel(list);
 
-            if (betModel == BetModel.KillTowNo) {
+            if (betModel == BetModel.KillTowNo || betModel == BetModel.KillTowNoFront || betModel == BetModel.KillTowNoMiddle) {
                 this.lblCycleTotal.Text = anModel.CycleTotalNum.ToString();
                 this.lblCycleWin.Text = anModel.CycleWinNum.ToString();
                 this.lblCycleFailedTotal.Text = anModel.CycleFailedNum.ToString();
@@ -232,32 +232,33 @@ namespace Lottery.Analysis
             list = list.OrderBy(r => r.IssueId).ToList();
             AnalysisBusiness ab = new AnalysisBusiness(betModel, list);
             ab.SetKillNo(this.txtkill1.Text, this.txtkill2.Text);
-            this.dataGridView2.DataSource = ab.FindPayPoints(int.Parse(txtling.Text));
+            this.dataGridView2.DataSource = ab.FindPayPoints(int.Parse(txtling.Text),double.Parse(txtLastRate.Text));
 
 
-        //     public string PayIssueId { get; set; }
+            //     public string PayIssueId { get; set; }
 
-        //public string StartDate { get; set; }
+            //public string StartDate { get; set; }
 
-        //public string PayDate { get; set; }
+            //public string PayDate { get; set; }
 
-        //public int RestPayCount { get; set; }
+            //public int RestPayCount { get; set; }
 
 
-        //public string StartIssueId { get; set; }
+            //public string StartIssueId { get; set; }
 
-        //public int PassCount { get; set; }
+            //public int PassCount { get; set; }
 
-        //public int WinCount { get; set; }
+            //public int WinCount { get; set; }
 
-            this.dataGridView2.Columns[0].HeaderCell.Value = "下单期";
-            this.dataGridView2.Columns[1].HeaderCell.Value = "观察开始日期";
-            this.dataGridView2.Columns[2].HeaderCell.Value = "下单时间";
-            this.dataGridView2.Columns[3].HeaderCell.Value = "剩余下单量";
-            this.dataGridView2.Columns[4].HeaderCell.Value = "观察开始期";
-            this.dataGridView2.Columns[5].HeaderCell.Value = "已过期数";
-            this.dataGridView2.Columns[6].HeaderCell.Value = "胜利期数";
-            this.dataGridView2.Columns[7].HeaderCell.Value = "下单终止期";
+            //cpp.PayIssueId = an[240 + i].IssueId;
+            //cpp.WinRate = (cycleWinNum / cycleTotalNum);
+            //cpp.WinCount = (int)cycleWinNum;
+            //cpp.PassCount = (int)cycleTotalNum;
+            this.dataGridView2.Columns["PayIssueId"].HeaderCell.Value = "下单期";
+            this.dataGridView2.Columns["WinRate"].HeaderCell.Value = "胜率";
+            this.dataGridView2.Columns["PassCount"].HeaderCell.Value = "总共期数";
+            this.dataGridView2.Columns["WinCount"].HeaderCell.Value = "胜利期数";
+
 
         }
     }

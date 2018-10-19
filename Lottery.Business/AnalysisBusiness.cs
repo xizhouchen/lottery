@@ -118,6 +118,12 @@ namespace Lottery.Business
             return _calModel.FindPayPoints(linjie);
         }
 
+        public List<CanBePayPoint> FindPayPoints(int linjie,double payRate)
+        {
+
+            return _calModel.FindPayPoints(linjie,payRate);
+        }
+
         public AnalysisModel GenerateAnalysisModel(List<DB_PredictRecord> records) {
             AnalysisModel model = new AnalysisModel();
             model.explodeRecord = new List<DB_PredictRecord>();

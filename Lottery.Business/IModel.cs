@@ -1,4 +1,5 @@
 ﻿using Lottery.Model;
+using Lottery.PlatForm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,24 @@ namespace Lottery.Business
           
             return payPoints;
 
+        }
+
+        public virtual List<CanBePayPoint> FindPayPoints(int lastNumber = 240, double payRate = 0.83)
+        {
+            List<CanBePayPoint> payPoints = new List<CanBePayPoint>();
+
+            return payPoints;
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pf">用来下单的平台</param>
+        /// <param name="last30Records">预测杀号，有些模型不需要，比如杀固定值</param>
+        /// <returns></returns>
+        public virtual bool AddOrder(IPlatForm pf,List<DB_PredictRecord> last30Records,string model = "li", int mul = 1)
+        {
+            return false;
         }
 
         public virtual CanBePayPoint FindPayPoint()

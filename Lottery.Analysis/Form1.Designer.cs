@@ -87,6 +87,8 @@
             this.button5 = new System.Windows.Forms.Button();
             this.txtling = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.txtLastRate = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -662,7 +664,7 @@
             this.txtling.Name = "txtling";
             this.txtling.Size = new System.Drawing.Size(48, 20);
             this.txtling.TabIndex = 2;
-            this.txtling.Text = "460";
+            this.txtling.Text = "240";
             // 
             // label24
             // 
@@ -670,15 +672,35 @@
             this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label24.Location = new System.Drawing.Point(301, 156);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(84, 26);
+            this.label24.Size = new System.Drawing.Size(62, 26);
             this.label24.TabIndex = 1;
-            this.label24.Text = "临界值:";
+            this.label24.Text = "最近:";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label25.Location = new System.Drawing.Point(301, 193);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(62, 26);
+            this.label25.TabIndex = 14;
+            this.label25.Text = "胜率:";
+            // 
+            // txtLastRate
+            // 
+            this.txtLastRate.Location = new System.Drawing.Point(385, 193);
+            this.txtLastRate.Name = "txtLastRate";
+            this.txtLastRate.Size = new System.Drawing.Size(48, 20);
+            this.txtLastRate.TabIndex = 15;
+            this.txtLastRate.Text = "0.83";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1212, 653);
+            this.Controls.Add(this.txtLastRate);
+            this.Controls.Add(this.label25);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.lblCycleRate);
             this.Controls.Add(this.lblCycleWin);
@@ -809,6 +831,8 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox txtling;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TextBox txtLastRate;
     }
 }
 
